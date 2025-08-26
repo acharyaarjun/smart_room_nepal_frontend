@@ -6,7 +6,11 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint",
+    "lint-staged": "lint-staged",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write --list-different .",
+    "check-types": "tsc --pretty --noEmit"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
@@ -29,6 +33,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.5",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
