@@ -18,9 +18,11 @@
     var(--tw-gradient-stops)
   );
 
-  --color-primary: #002140;
-  --color-secondary: #6abed4;
-  --color-dark: #0f172a;
+  --color-primary: #5143d9;
+  --color-dark: #222529;
+  --color-light-dark: #3e4149;
+  --color-light: #ffffff;
+  --color-dropdown: #191b1d;
   --color-danger: #e3342f;
   --color-success: #38c172;
   --color-warning: #f6993f;
@@ -32,6 +34,9 @@
   --breakpoint-lg: 1024px;
   --breakpoint-xl: 1280px;
   --breakpoint-2xl: 1536px;
+
+  /* // shadow custom which show sadow form all four side */
+  --shadow-custom: 0 0 10px rgba(0, 0, 0, 0.1);
 
   @keyframes fadeInUp {
     0% {
@@ -85,7 +90,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: var(--font-poppins) !important;
+    font-family: var(--font-livvic) !important;
   }
 
   *,
@@ -95,6 +100,11 @@
   ::file-selector-button {
     border-color: var(--color-gray-200, currentColor);
   }
+}
+
+/* scrollbar hidden */
+body::-webkit-scrollbar {
+  display: none;
 }
 
 body {

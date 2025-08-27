@@ -9,6 +9,9 @@
 
 const AppConsts = {
   APP_BASE_URL: "https://smartroomnepal.com",
+  APP_NAME: "Smart Room Nepal",
+  APP_DESCRIPTION: "Smart Room Nepal - Your Smart Home Solution",
+  APP_CREATOR: "@smartroomnepal",
 
   // social media links
   TWITTER_URL: "https://twitter.com/smartroomnepal",
