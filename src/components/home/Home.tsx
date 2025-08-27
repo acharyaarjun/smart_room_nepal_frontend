@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
-import { ThemeToggler } from "@/components/common";
+import { Hero } from "@/components/home";
 
 export default function Home() {
   return (
-    <div className="h-screen w-screen flex justify-center items-center">
-      <ThemeToggler />
-    </div>
+    <>
+      <Hero />
+    </>
   );
 }

@@ -21,7 +21,7 @@ export default function Navbar() {
   const [aboutOpen, setAboutOpen] = useState(false);
 
   return (
-    <section className="w-full bg-light dark:bg-dark sticky top-0 z-50">
+    <section className="w-full bg-light dark:bg-dark sticky top-0 z-50 h-[80px]">
       <div className="container">
         <div className="flex flex-col md:flex-row justify-between items-center py-3">
           {/* Logo and mobile hamburger */}
@@ -175,7 +175,7 @@ export default function Navbar() {
           </div>
 
           {/* Right Side Icons - Hidden on mobile, shown on medium+ */}
-          <div className="hidden md:flex items-center space-x-4 mt-2 md:mt-0">
+          <div className="hidden md:flex items-center space-x-4 mt-2 md:mt-0 ">
             {/* Search */}
             <Dropdown
               trigger={
@@ -251,9 +251,8 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu Dropdown - Only shown on small devices */}
         <div
-          className={`md:hidden transition-all duration-500 ease-in-out overflow-hidden ${
+          className={`md:hidden transition-all duration-500 ease-in-out overflow-hidden bg-light dark:bg-dark ${
             menuOpen
               ? "max-h-[500px] opacity-100 visible"
               : "max-h-0 opacity-0 invisible"
