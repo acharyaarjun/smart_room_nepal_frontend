@@ -1,19 +1,22 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Livvic } from "next/font/google";
 import "@/styles/globals.css";
 import { AosProvider, StoreProvider, CustomThemeProvider } from "@/providers";
 import AppUrl from "@/utils/appConsts";
+import AppConsts from "@/utils/appConsts";
+import { Navbar } from "@/components/common/header";
+import Footer from "@/components/common/footer/Footer";
 
-const poppins = Poppins({
+const livvic = Livvic({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-poppins",
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-livvic",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "900"],
 });
 
 export const metadata: Metadata = {
-  title: "Gyaan Danam",
-  description: "Gyaan Danam",
+  title: AppConsts.APP_NAME,
+  description: AppConsts.APP_DESCRIPTION,
   openGraph: {
     type: "website",
     locale: "en_IE",
@@ -28,10 +31,10 @@ export const metadata: Metadata = {
     ],
   },
   twitter: {
-    site: "@gyaandanam",
-    title: "Gyaan Danam",
-    description: "Gyaan Danam",
-    creator: "@gyaandanam",
+    site: AppConsts.APP_CREATOR,
+    title: AppConsts.APP_NAME,
+    description: AppConsts.APP_DESCRIPTION,
+    creator: AppConsts.APP_CREATOR,
     images: [
       {
         url: `${AppUrl.APP_BASE_URL}/logo.png`,
@@ -50,12 +53,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${poppins.variable} antialiased bg-[#efefef] dark:bg-dark`}
-      >
+      <body className={`${livvic.variable} antialiased bg-light dark:bg-dark`}>
         <AosProvider>
           <StoreProvider>
-            <CustomThemeProvider>{children}</CustomThemeProvider>
+            <CustomThemeProvider>
+              <Navbar />
+              {children}
+              <Footer />
+            </CustomThemeProvider>
           </StoreProvider>
         </AosProvider>
       </body>

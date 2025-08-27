@@ -7,7 +7,7 @@ export default function NotFound() {
   const router = useRouter();
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center bg-white dark:bg-gray-900 text-center px-4">
+    <div className="fixed inset-0 flex flex-col items-center justify-center bg-white dark:bg-dark text-center px-4">
       <BiGhost className="text-7xl text-gray-500 dark:text-gray-300 mb-4 animate-bounce" />
       <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
         404 - Page Not Found

@@ -10,7 +10,7 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center bg-white dark:bg-gray-900 text-center px-4">
+    <div className="fixed inset-0 flex flex-col items-center justify-center bg-white dark:bg-dark text-center px-4">
       <BiError className="text-6xl text-red-500 dark:text-red-400 mb-4" />
       <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-2">
         {process.env.NODE_ENV === "development"
