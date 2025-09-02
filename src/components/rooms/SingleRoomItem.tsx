@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import Image from "next/image";
 import {
@@ -92,7 +93,7 @@ export default function SingleRoomItem({
 
         {/* Short Description (only for long card) */}
         {isLong && room.shortDescription && (
-          <p className="text-gray-600 dark:text-gray-400 mb-3 line-clamp-3">
+          <p className="text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
             {room.shortDescription}
           </p>
         )}

@@ -248,7 +248,7 @@ export default function Hero() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
                 {/* Location */}
                 <div className="space-y-2">
-                  <label className=" text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                  <label className=" text-sm font-medium text-normal flex items-center gap-2">
                     <FaMapMarkerAlt className="text-primary" />
                     Location
                   </label>
@@ -266,7 +266,7 @@ export default function Hero() {
 
                 {/* Room Type */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                  <label className="text-sm font-medium text-normal flex items-center gap-2">
                     <FaBed className="text-primary" />
                     Room Type
                   </label>
@@ -284,7 +284,7 @@ export default function Hero() {
 
                 {/* Number of Persons */}
                 <div className="space-y-2">
-                  <label className=" text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                  <label className=" text-sm font-medium text-normal flex items-center gap-2">
                     <FaUser className="text-primary" />
                     Persons
                   </label>
