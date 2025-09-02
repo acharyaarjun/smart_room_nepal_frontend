@@ -15,7 +15,7 @@ import { CiSearch } from "react-icons/ci";
 import Link from "next/link";
 
 export default function Navbar() {
-  const dropdownText = "text-gray-700 dark:text-gray-300";
+  const dropdownText = "text-normal";
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
