@@ -6,7 +6,7 @@ import heroIconOne from "@/assets/images/home/hero-icon-one.jpg";
 import heroIconTwo from "@/assets/images/home/hero-icon-two.jpg";
 import Image from "next/image";
 import { BiSupport } from "react-icons/bi";
-import { FaSearch, FaMapMarkerAlt, FaBed, FaUser } from "react-icons/fa";
+import { FaSearch, FaMapMarkerAlt, FaBed, FaRupeeSign } from "react-icons/fa";
 import Select from "react-select";
 import { FaCirclePlay } from "react-icons/fa6";
 import { useTheme } from "next-themes";
@@ -20,7 +20,7 @@ export default function Hero() {
     value: string;
     label: string;
   } | null>(null);
-  const [selectedPersons, setSelectedPersons] = useState<{
+  const [selectedBudget, setSelectedBudget] = useState<{
     value: string;
     label: string;
   } | null>(null);
@@ -29,25 +29,30 @@ export default function Hero() {
   const locationOptions = [
     { value: "kathmandu", label: "Kathmandu" },
     { value: "pokhara", label: "Pokhara" },
-    { value: "chitwan", label: "Chitwan" },
     { value: "lalitpur", label: "Lalitpur" },
     { value: "bhaktapur", label: "Bhaktapur" },
+    { value: "chitwan", label: "Chitwan" },
+    { value: "butwal", label: "Butwal" },
+    { value: "biratnagar", label: "Biratnagar" },
+    { value: "dharan", label: "Dharan" },
   ];
 
   const roomTypeOptions = [
     { value: "single", label: "Single Room" },
     { value: "double", label: "Double Room" },
-    { value: "deluxe", label: "Deluxe Room" },
-    { value: "suite", label: "Suite" },
-    { value: "apartment", label: "Apartment" },
+    { value: "shared", label: "Shared Room" },
+    { value: "studio", label: "Studio Apartment" },
+    { value: "1bhk", label: "1 BHK" },
+    { value: "2bhk", label: "2 BHK" },
+    { value: "hostel", label: "Hostel Bed" },
   ];
 
-  const personsOptions = [
-    { value: "1", label: "1 Person" },
-    { value: "2", label: "2 Persons" },
-    { value: "3", label: "3 Persons" },
-    { value: "4", label: "4 Persons" },
-    { value: "5+", label: "5+ Persons" },
+  const budgetOptions = [
+    { value: "5000-10000", label: "Rs. 5,000 - 10,000" },
+    { value: "10000-15000", label: "Rs. 10,000 - 15,000" },
+    { value: "15000-25000", label: "Rs. 15,000 - 25,000" },
+    { value: "25000-40000", label: "Rs. 25,000 - 40,000" },
+    { value: "40000+", label: "Rs. 40,000+" },
   ];
 
   const { theme } = useTheme();
@@ -131,7 +136,7 @@ export default function Hero() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ selectedLocation, selectedRoomType, selectedPersons });
+    console.log({ selectedLocation, selectedRoomType, selectedBudget });
   };
 
   return (
@@ -144,9 +149,9 @@ export default function Hero() {
           {/* Left Column - Content */}
           <div className="flex flex-col justify-center order-1">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-800 dark:text-white">
-              Find the best{" "}
+              Nepal&apos;s #1{" "}
               <span className="relative inline-block text-primary">
-                Rooms nearby
+                Room Finder
                 <svg
                   className="absolute left-0 -bottom-2 w-full h-4"
                   viewBox="0 0 200 20"
@@ -160,29 +165,30 @@ export default function Hero() {
                     strokeLinecap="round"
                   />
                 </svg>
-              </span>
+              </span>{" "}
+              Platform
             </h1>
 
             <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-              We help you discover the best rooms in your area, offering all the
-              essential amenities, convenient locations, and affordable options
-              so you can enjoy a comfortable, safe, and hassle-free stay every
-              time.
+              SmartRoom Nepal connects you with verified landlords and quality
+              rooms across Nepal. From affordable hostels to luxury apartments,
+              find your perfect living space with transparent pricing, virtual
+              tours, and secure rental agreements.
             </p>
 
             <div className="flex flex-wrap gap-6 items-center">
               <Link
                 href={"/rooms"}
-                className="px-4 py-3 bg-primary/10 rounded-md font-semibold text-primary hover:bg-primary hover:text-white transition-colors duration-300 inline-block"
+                className="px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-dark transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
-                Discover Now
+                Start Your Search
               </Link>
 
               <div className="flex items-center gap-3">
                 <div className="relative h-12 w-12 rounded-full overflow-hidden">
                   <Image
                     src={heroIconOne}
-                    alt="Hero Icon One"
+                    alt="SmartRoom Nepal Success Stories"
                     fill
                     className="object-cover"
                   />
@@ -191,7 +197,7 @@ export default function Hero() {
                   </div>
                 </div>
                 <span className="text-base font-medium text-gray-600 dark:text-gray-300">
-                  Watch our story
+                  Success Stories
                 </span>
               </div>
             </div>
@@ -203,7 +209,7 @@ export default function Hero() {
               <div className="relative shadow-xl pt-4">
                 <Image
                   src={heroImage}
-                  alt="Hero Image"
+                  alt="Quality rooms and apartments in Nepal"
                   width={600}
                   height={400}
                   className="w-full h-auto object-cover rounded-2xl"
@@ -212,7 +218,7 @@ export default function Hero() {
                 <div className="hidden lg:block absolute top-20 -left-7 h-14 w-14 rounded-full overflow-hidden border-4 border-white dark:border-gray-800 shadow-lg">
                   <Image
                     src={heroIconOne}
-                    alt="Hero Icon One"
+                    alt="Verified Property"
                     fill
                     className="object-cover"
                   />
@@ -221,16 +227,20 @@ export default function Hero() {
                 <div className="hidden lg:block absolute top-50 -left-10 h-20 w-20 rounded-full overflow-hidden border-4 border-white dark:border-gray-800 shadow-lg">
                   <Image
                     src={heroIconTwo}
-                    alt="Hero Icon Two"
+                    alt="Happy Tenant"
                     fill
                     className="object-cover"
                   />
                 </div>
 
-                <div className="absolute top-0 -right-4 rounded-lg bg-light/30 dark:bg-dropdown/90 flex flex-col justify-center items-center p-4 shadow-custom">
-                  <BiSupport className="text-3xl text-danger" />
-                  <h4 className="text-2xl font-bold ">24 / 7</h4>
-                  <p className="text-base font-medium">Guide Support</p>
+                <div className="absolute top-0 -right-4 rounded-lg bg-white/90 dark:bg-dropdown/90 backdrop-blur-sm flex flex-col justify-center items-center p-4 shadow-custom border border-gray-100 dark:border-gray-700">
+                  <BiSupport className="text-3xl text-primary mb-2" />
+                  <h4 className="text-2xl font-bold text-gray-800 dark:text-white">
+                    24 / 7
+                  </h4>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300 text-center">
+                    Rental Support
+                  </p>
                 </div>
               </div>
             </div>
@@ -239,24 +249,24 @@ export default function Hero() {
 
         {/* Search Form */}
         <div className="w-full order-3 -mt-20 z-20 relative">
-          <div className="bg-light dark:bg-dropdown rounded-2xl shadow-xl p-6 lg:p-8 border border-gray-100 dark:border-gray-700">
+          <div className="bg-white/95 dark:bg-dropdown/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 lg:p-8 border border-gray-100 dark:border-gray-700">
             <h3 className="text-xl lg:text-2xl font-semibold text-gray-800 dark:text-white mb-6 text-center">
-              Find Your Perfect Room
+              Find Your Ideal Room in Nepal
             </h3>
 
             <form onSubmit={handleSearch} className="w-full">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
                 {/* Location */}
                 <div className="space-y-2">
-                  <label className=" text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
                     <FaMapMarkerAlt className="text-primary" />
-                    Location
+                    City/Location
                   </label>
                   <Select
                     value={selectedLocation}
                     onChange={setSelectedLocation}
                     options={locationOptions}
-                    placeholder="Select location..."
+                    placeholder="Select city..."
                     styles={customSelectStyles}
                     className="react-select-container"
                     classNamePrefix="react-select"
@@ -282,17 +292,17 @@ export default function Hero() {
                   />
                 </div>
 
-                {/* Number of Persons */}
+                {/* Budget Range */}
                 <div className="space-y-2">
-                  <label className=" text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                    <FaUser className="text-primary" />
-                    Persons
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                    <FaRupeeSign className="text-primary" />
+                    Budget Range
                   </label>
                   <Select
-                    value={selectedPersons}
-                    onChange={setSelectedPersons}
-                    options={personsOptions}
-                    placeholder="Select persons..."
+                    value={selectedBudget}
+                    onChange={setSelectedBudget}
+                    options={budgetOptions}
+                    placeholder="Select budget..."
                     styles={customSelectStyles}
                     className="react-select-container"
                     classNamePrefix="react-select"
@@ -307,9 +317,22 @@ export default function Hero() {
                     className="w-full h-12 bg-primary hover:bg-primary-dark text-white font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                   >
                     <FaSearch className="text-sm" />
-                    Search Rooms
+                    Find Rooms
                   </button>
                 </div>
+              </div>
+
+              {/* Additional Info */}
+              <div className="mt-4 text-center">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Over{" "}
+                  <span className="font-semibold text-primary">5,000+</span>{" "}
+                  verified rooms •
+                  <span className="font-semibold text-green-600"> 2,000+</span>{" "}
+                  happy tenants •
+                  <span className="font-semibold text-blue-600"> 98%</span>{" "}
+                  satisfaction rate
+                </p>
               </div>
             </form>
           </div>
