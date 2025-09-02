@@ -1,15 +1,12 @@
 "use client";
 import Link from "next/link";
 import React, { useState } from "react";
-import { useTheme } from "next-themes";
 import Image from "next/image";
 import contactImage from "@/assets/images/contact/contact.png";
 
 import { FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa";
 
 export default function ContactUs() {
-  const { theme } = useTheme();
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
