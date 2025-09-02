@@ -110,3 +110,7 @@ body::-webkit-scrollbar {
 body {
   @apply overflow-x-hidden;
 }
+
+.text-normal {
+  @apply text-gray-600 dark:text-gray-300;
+}
