@@ -91,6 +91,8 @@ export default function RoomGallery({ images = [] }: Props) {
             src={images[selectedImage]}
             alt="Room Main View"
             className="w-full h-full object-cover rounded-2xl"
+            priority
+            quality={100}
           />
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 rounded-2xl flex items-center justify-center">
             <BiExpand className="text-white opacity-0 group-hover:opacity-100 text-2xl transition-all duration-300" />
@@ -118,6 +120,8 @@ export default function RoomGallery({ images = [] }: Props) {
                 className="w-full h-full object-cover"
                 height={500}
                 width={500}
+                priority
+                quality={100}
               />
               {index === 3 && images.length > 4 && (
                 <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
@@ -150,6 +154,8 @@ export default function RoomGallery({ images = [] }: Props) {
                 src={img}
                 alt={`Room view ${index + 1}`}
                 className="w-full h-full object-cover"
+                priority
+                quality={100}
               />
             </div>
           ))}
@@ -197,11 +203,13 @@ export default function RoomGallery({ images = [] }: Props) {
             {/* Main Image Container */}
             <div className="relative w-full h-[80vh] flex items-center justify-center">
               <Image
-                height={1000}
-                width={1000}
+                height={2000}
+                width={2000}
                 src={images[selectedImage]}
                 alt="Room Full View"
                 className="max-w-full max-h-full object-contain"
+                priority
+                quality={100}
               />
             </div>
 
