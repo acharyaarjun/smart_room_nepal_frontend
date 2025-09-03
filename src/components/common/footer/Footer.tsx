@@ -140,17 +140,17 @@ export default function Footer() {
                     Smart Room Nepal Pvt. Ltd.
                   </p>
                   <p className="text-gray-300 text-base font-medium">
-                    New Baneshwor, Kathmandu
+                    Pokhara, Kaski
                   </p>
                   <p className="text-gray-300 text-base font-medium">
-                    Nepal - 44600
+                    Nepal - 33600
                   </p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
                 <FaPhone className="text-primary text-base" />
                 <span className="text-gray-300 text-base font-medium">
-                  Office: +977-1-1234567
+                  Office: +977-9876543210
                 </span>
               </div>
             </div>

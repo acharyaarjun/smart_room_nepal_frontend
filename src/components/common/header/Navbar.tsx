@@ -13,12 +13,17 @@ import {
 } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
-  const dropdownText = "text-gray-700 dark:text-gray-300";
+  const dropdownText = "text-normal";
+  const pathname = usePathname();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
+
+  const isActive = (path: string) => pathname === path;
+  const isAboutActive = pathname.startsWith("/about");
 
   return (
     <section className="w-full bg-light dark:bg-dark sticky top-0 z-50 h-[80px]">
@@ -132,18 +137,24 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Center Nav Links - Hidden on mobile, shown on medium+ */}
+          {/* Center Nav Links */}
           <div className="hidden md:flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6 w-full md:w-auto mt-2 md:mt-0">
             <Link
               href={"/"}
-              className="cursor-pointer hover:text-primary font-medium transition-colors duration-200"
+              className={`cursor-pointer font-medium transition-colors duration-200 ${
+                isActive("/") ? "text-primary" : "hover:text-primary"
+              }`}
             >
               Home
             </Link>
 
             <Dropdown
               trigger={
-                <span className="cursor-pointer hover:text-primary font-medium transition-colors duration-200 flex items-center">
+                <span
+                  className={`cursor-pointer font-medium transition-colors duration-200 flex items-center ${
+                    isAboutActive ? "text-primary" : "hover:text-primary"
+                  }`}
+                >
                   About Us
                 </span>
               }
@@ -151,10 +162,22 @@ export default function Navbar() {
               triggerMode="hover"
             >
               <ul className={`flex flex-col text-base ${dropdownText}`}>
-                <li className="px-4 py-2 hover:bg-primary/10 cursor-pointer hover:text-primary font-semibold rounded-md transition-colors duration-200">
+                <li
+                  className={`px-4 py-2 cursor-pointer font-semibold rounded-md transition-colors duration-200 ${
+                    pathname === "/about/team"
+                      ? "text-primary bg-primary/10"
+                      : "hover:bg-primary/10 hover:text-primary"
+                  }`}
+                >
                   Team
                 </li>
-                <li className="px-4 py-2 hover:bg-primary/10 cursor-pointer hover:text-primary font-semibold rounded-md transition-colors duration-200">
+                <li
+                  className={`px-4 py-2 cursor-pointer font-semibold rounded-md transition-colors duration-200 ${
+                    pathname === "/about/careers"
+                      ? "text-primary bg-primary/10"
+                      : "hover:bg-primary/10 hover:text-primary"
+                  }`}
+                >
                   Careers
                 </li>
               </ul>
@@ -162,19 +185,23 @@ export default function Navbar() {
 
             <Link
               href={"/rooms"}
-              className="cursor-pointer hover:text-primary font-medium transition-colors duration-200"
+              className={`cursor-pointer font-medium transition-colors duration-200 ${
+                isActive("/rooms") ? "text-primary" : "hover:text-primary"
+              }`}
             >
               Rooms
             </Link>
             <Link
               href={"/contact-us"}
-              className="cursor-pointer hover:text-primary font-medium transition-colors duration-200"
+              className={`cursor-pointer font-medium transition-colors duration-200 ${
+                isActive("/contact-us") ? "text-primary" : "hover:text-primary"
+              }`}
             >
               Contact Us
             </Link>
           </div>
 
-          {/* Right Side Icons - Hidden on mobile, shown on medium+ */}
+          {/* Right Side Icons - Desktop */}
           <div className="hidden md:flex items-center space-x-4 mt-2 md:mt-0 ">
             {/* Search */}
             <Dropdown
@@ -251,6 +278,7 @@ export default function Navbar() {
           </div>
         </div>
 
+        {/* Mobile Dropdown Menu */}
         <div
           className={`md:hidden transition-all duration-500 ease-in-out overflow-hidden bg-light dark:bg-dark ${
             menuOpen
@@ -261,7 +289,11 @@ export default function Navbar() {
           <div className="py-4 flex flex-col border-t border-gray-200 dark:border-gray-700 mt-2">
             <Link
               href={"/"}
-              className="cursor-pointer hover:text-primary font-medium py-3 px-4 rounded-lg transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800 border-b border-gray-100 dark:border-gray-800"
+              className={`cursor-pointer font-medium py-3 px-4 rounded-lg transition-all duration-200 border-b border-gray-100 dark:border-gray-800 ${
+                isActive("/")
+                  ? "text-primary bg-gray-100 dark:bg-gray-800"
+                  : "hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-800"
+              }`}
               onClick={() => setMenuOpen(false)}
             >
               Home
@@ -272,7 +304,11 @@ export default function Navbar() {
                 className="flex items-center justify-between py-3 px-4 rounded-lg transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800"
                 onClick={() => setAboutOpen(!aboutOpen)}
               >
-                <span className="cursor-pointer hover:text-primary font-medium">
+                <span
+                  className={`cursor-pointer font-medium ${
+                    isAboutActive ? "text-primary" : "hover:text-primary"
+                  }`}
+                >
                   About Us
                 </span>
                 {aboutOpen ? (
@@ -289,15 +325,23 @@ export default function Navbar() {
               >
                 <div className="pl-6 flex flex-col pb-2">
                   <Link
-                    href="#"
-                    className="text-sm py-2 px-4 hover:text-primary font-medium rounded-lg transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    href="/about/team"
+                    className={`text-sm py-2 px-4 font-medium rounded-lg transition-all duration-200 ${
+                      pathname === "/about/team"
+                        ? "text-primary bg-gray-100 dark:bg-gray-800"
+                        : "hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-800"
+                    }`}
                     onClick={() => setMenuOpen(false)}
                   >
                     Team
                   </Link>
                   <Link
-                    href="#"
-                    className="text-sm py-2 px-4 hover:text-primary font-medium rounded-lg transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    href="/about/careers"
+                    className={`text-sm py-2 px-4 font-medium rounded-lg transition-all duration-200 ${
+                      pathname === "/about/careers"
+                        ? "text-primary bg-gray-100 dark:bg-gray-800"
+                        : "hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-800"
+                    }`}
                     onClick={() => setMenuOpen(false)}
                   >
                     Careers
@@ -308,7 +352,11 @@ export default function Navbar() {
 
             <Link
               href={"/rooms"}
-              className="cursor-pointer hover:text-primary font-medium py-3 px-4 rounded-lg transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800 border-b border-gray-100 dark:border-gray-800"
+              className={`cursor-pointer font-medium py-3 px-4 rounded-lg transition-all duration-200 border-b border-gray-100 dark:border-gray-800 ${
+                isActive("/rooms")
+                  ? "text-primary bg-gray-100 dark:bg-gray-800"
+                  : "hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-800"
+              }`}
               onClick={() => setMenuOpen(false)}
             >
               Rooms
@@ -316,7 +364,11 @@ export default function Navbar() {
 
             <Link
               href={"/contact-us"}
-              className="cursor-pointer hover:text-primary font-medium py-3 px-4 rounded-lg transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+              className={`cursor-pointer font-medium py-3 px-4 rounded-lg transition-all duration-200 ${
+                isActive("/contact-us")
+                  ? "text-primary bg-gray-100 dark:bg-gray-800"
+                  : "hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-800"
+              }`}
               onClick={() => setMenuOpen(false)}
             >
               Contact Us

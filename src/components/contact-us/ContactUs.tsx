@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
 import React, { useState } from "react";
-import { useTheme } from "next-themes";
 import Image from "next/image";
 import contactImage from "@/assets/images/contact/contact.png";
 import { FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa";
+import { useTheme } from "next-themes";
 
 export default function ContactUs() {
   const { theme } = useTheme();
@@ -103,7 +103,9 @@ export default function ContactUs() {
           </div>
           {/* Right: Form */}
           <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700">
-            <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-6">Send us message</h2>
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-6">
+              Send us message
+            </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
