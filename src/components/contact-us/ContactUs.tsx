@@ -172,7 +172,7 @@ export default function ContactUs() {
               </p>
               <button
                 type="submit"
-                className="w-full bg-black text-white font-semibold py-3 rounded-lg hover:bg-dropdown transition-colors duration-300"
+                className="w-full text-white font-semibold py-3 rounded-lg transition-colors duration-300 bg-dropdown dark:bg-dark"
               >
                 Send Message
               </button>
