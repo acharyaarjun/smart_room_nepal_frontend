@@ -8,6 +8,7 @@ import {
   FaBookmark,
 } from "react-icons/fa";
 import { Room } from "@/types/room/room";
+import Link from "next/link";
 
 type SingleRoomItemProps = {
   room: Room;
@@ -87,9 +88,12 @@ export default function SingleRoomItem({
         </div>
 
         {/* Title */}
-        <h2 className="font-bold text-lg md:text-xl text-gray-800 dark:text-white mb-2 line-clamp-1">
+        <Link
+          href={`/rooms/${room.id}`}
+          className="font-bold text-lg md:text-xl text-gray-800 dark:text-white mb-2 line-clamp-1"
+        >
           {room.title}
-        </h2>
+        </Link>
 
         {/* Short Description (only for long card) */}
         {isLong && room.shortDescription && (
@@ -129,9 +133,12 @@ export default function SingleRoomItem({
             </span>
           </div>
 
-          <button className="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300">
+          <Link
+            href={`/rooms/${room.id}`}
+            className="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300"
+          >
             View Details
-          </button>
+          </Link>
         </div>
       </div>
     </div>
