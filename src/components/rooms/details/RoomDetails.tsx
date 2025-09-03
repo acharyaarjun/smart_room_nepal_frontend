@@ -32,7 +32,6 @@ import { RoomDetails as RoomDetailsType } from "@/types/room/details";
 
 export default function RoomDetails() {
   const [isLiked, setIsLiked] = useState<boolean>(false);
-  const [showAllPhotos, setShowAllPhotos] = useState<boolean>(false);
 
   const roomData: RoomDetailsType = {
     title: "Luxurious 2BHK Apartment with Modern Amenities",
