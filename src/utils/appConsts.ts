@@ -13,6 +13,13 @@ const AppConsts = {
   APP_DESCRIPTION: "Smart Room Nepal - Your Smart Home Solution",
   APP_CREATOR: "@smartroomnepal",
 
+  // Application URLs
+  DASHBOARD_URL: "/dashboard",
+  DASHBOARD_BOOKINGS_URL: "/dashboard/bookings",
+  DASHBOARD_INVITATIONS_URL: "/dashboard/invitations",
+  DASHBOARD_NOTIFICATIONS_URL: "/dashboard/notifications",
+  DASHBOARD_SETTINGS_URL: "/dashboard/settings",
+
   // social media links
   TWITTER_URL: "https://twitter.com/smartroomnepal",
   INSTAGRAM_URL: "https://instagram.com/smartroomnepal",

@@ -1,5 +1,9 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "./features/auth/authSlice";
+import guestReducer from "./features/auth/guestSlice";
+import popupMessageReducer from "./features/common/popupMessageSlice";
+import sidebarReducer from "./features/common/sidebarSlice";
+import appReducer from "./features/common/appSlice";
 
 /**
  * The `rootReducer` combines all the reducers in the application.
@@ -13,7 +17,11 @@ import authReducer from "./features/auth/authSlice";
  * });
  */
 const rootReducer = combineReducers({
+  app: appReducer,
   auth: authReducer,
+  guest: guestReducer,
+  popupMessage: popupMessageReducer,
+  sidebar: sidebarReducer,
 });
 
 /**
