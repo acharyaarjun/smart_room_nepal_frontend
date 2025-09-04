@@ -6,26 +6,15 @@ import heroIconOne from "@/assets/images/home/hero-icon-one.jpg";
 import heroIconTwo from "@/assets/images/home/hero-icon-two.jpg";
 import Image from "next/image";
 import { BiSupport } from "react-icons/bi";
-import { FaSearch, FaMapMarkerAlt, FaBed, FaUser } from "react-icons/fa";
-import Select from "react-select";
+import { FaSearch } from "react-icons/fa";
 import { FaCirclePlay } from "react-icons/fa6";
-import { useTheme } from "next-themes";
+import { SelectElement } from "@/components/common/form-element";
 
 export default function Hero() {
-  const [selectedLocation, setSelectedLocation] = useState<{
-    value: string;
-    label: string;
-  } | null>(null);
-  const [selectedRoomType, setSelectedRoomType] = useState<{
-    value: string;
-    label: string;
-  } | null>(null);
-  const [selectedPersons, setSelectedPersons] = useState<{
-    value: string;
-    label: string;
-  } | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
+  const [selectedRoomType, setSelectedRoomType] = useState<string | null>(null);
+  const [selectedPersons, setSelectedPersons] = useState<string | null>(null);
 
-  // Options for the dropdowns
   const locationOptions = [
     { value: "kathmandu", label: "Kathmandu" },
     { value: "pokhara", label: "Pokhara" },
@@ -49,85 +38,6 @@ export default function Hero() {
     { value: "4", label: "4 Persons" },
     { value: "5+", label: "5+ Persons" },
   ];
-
-  const { theme } = useTheme();
-
-  // Theme-aware select styles
-  const customSelectStyles = {
-    control: (provided: object, state: { isFocused: boolean }) => ({
-      ...provided,
-      minHeight: "48px",
-      backgroundColor: theme === "dark" ? "hsl(0, 0%, 15%)" : "transparent",
-      border: state.isFocused
-        ? "2px solid #5143d9"
-        : theme === "dark"
-        ? "1px solid hsl(0, 0%, 40%)"
-        : "1px solid hsl(0, 0%, 80%)",
-      borderRadius: "8px",
-      boxShadow: state.isFocused ? "0 0 0 3px rgba(81, 67, 217, 0.1)" : "none",
-      "&:hover": {
-        border: "1px solid #5143d9",
-      },
-    }),
-    menu: (provided: object) => ({
-      ...provided,
-      backgroundColor:
-        theme === "dark" ? "hsl(0, 0%, 20%)" : "hsl(0, 0%, 100%)",
-      border:
-        theme === "dark"
-          ? "1px solid hsl(0, 0%, 30%)"
-          : "1px solid hsl(0, 0%, 40%)",
-      borderRadius: "8px",
-      boxShadow:
-        "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-      zIndex: 9999,
-    }),
-    option: (
-      provided: object,
-      state: { isSelected: boolean; isFocused: boolean }
-    ) => ({
-      ...provided,
-      backgroundColor: state.isSelected
-        ? "#5143d9"
-        : state.isFocused
-        ? theme === "dark"
-          ? "hsl(0, 0%, 25%)"
-          : "hsl(0, 0%, 96%)"
-        : "transparent",
-      color: state.isSelected
-        ? "white"
-        : theme === "dark"
-        ? "hsl(0, 0%, 90%)"
-        : "hsl(0, 0%, 20%)",
-      "&:hover": {
-        backgroundColor: "#5143d9",
-        color: "white",
-      },
-      padding: "10px 12px",
-    }),
-    singleValue: (provided: object) => ({
-      ...provided,
-      color: theme === "dark" ? "hsl(0, 0%, 90%)" : "hsl(0, 0%, 20%)",
-    }),
-    placeholder: (provided: object) => ({
-      ...provided,
-      color: theme === "dark" ? "hsl(0, 0%, 60%)" : "hsl(0, 0%, 60%)",
-    }),
-    input: (provided: object) => ({
-      ...provided,
-      color: theme === "dark" ? "hsl(0, 0%, 90%)" : "hsl(0, 0%, 20%)",
-    }),
-    indicatorSeparator: () => ({
-      display: "none",
-    }),
-    dropdownIndicator: (provided: object) => ({
-      ...provided,
-      color: theme === "dark" ? "hsl(0, 0%, 60%)" : "hsl(0, 0%, 60%)",
-      "&:hover": {
-        color: "#5143d9",
-      },
-    }),
-  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -246,65 +156,47 @@ export default function Hero() {
 
             <form onSubmit={handleSearch} className="w-full">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-                {/* Location */}
-                <div className="space-y-2">
-                  <label className=" text-sm font-medium text-normal flex items-center gap-2">
-                    <FaMapMarkerAlt className="text-primary" />
-                    Location
-                  </label>
-                  <Select
-                    value={selectedLocation}
-                    onChange={setSelectedLocation}
-                    options={locationOptions}
-                    placeholder="Select location..."
-                    styles={customSelectStyles}
-                    className="react-select-container"
-                    classNamePrefix="react-select"
-                    required
-                  />
-                </div>
+                <SelectElement
+                  title="Location"
+                  placeholder="Select location..."
+                  value={selectedLocation}
+                  name="location"
+                  error={null}
+                  onChange={setSelectedLocation}
+                  onBlur={() => {}}
+                  options={locationOptions}
+                  isRequired
+                />
 
-                {/* Room Type */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-normal flex items-center gap-2">
-                    <FaBed className="text-primary" />
-                    Room Type
-                  </label>
-                  <Select
-                    value={selectedRoomType}
-                    onChange={setSelectedRoomType}
-                    options={roomTypeOptions}
-                    placeholder="Select room type..."
-                    styles={customSelectStyles}
-                    className="react-select-container"
-                    classNamePrefix="react-select"
-                    required
-                  />
-                </div>
+                <SelectElement
+                  title="Room Type"
+                  placeholder="Select room type..."
+                  value={selectedRoomType}
+                  name="roomType"
+                  error={null}
+                  onChange={setSelectedRoomType}
+                  onBlur={() => {}}
+                  options={roomTypeOptions}
+                  isRequired
+                />
 
-                {/* Number of Persons */}
-                <div className="space-y-2">
-                  <label className=" text-sm font-medium text-normal flex items-center gap-2">
-                    <FaUser className="text-primary" />
-                    Persons
-                  </label>
-                  <Select
-                    value={selectedPersons}
-                    onChange={setSelectedPersons}
-                    options={personsOptions}
-                    placeholder="Select persons..."
-                    styles={customSelectStyles}
-                    className="react-select-container"
-                    classNamePrefix="react-select"
-                    required
-                  />
-                </div>
+                <SelectElement
+                  title="Persons"
+                  placeholder="Select persons..."
+                  value={selectedPersons}
+                  name="persons"
+                  error={null}
+                  onChange={setSelectedPersons}
+                  onBlur={() => {}}
+                  options={personsOptions}
+                  isRequired
+                />
 
                 {/* Search Button */}
                 <div className="flex items-end">
                   <button
                     type="submit"
-                    className="w-full h-12 bg-primary hover:bg-primary-dark text-white font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                    className="w-full py-2.5 bg-primary hover:bg-primary-dark text-white font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                   >
                     <FaSearch className="text-sm" />
                     Search Rooms

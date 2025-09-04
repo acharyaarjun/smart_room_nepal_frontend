@@ -4,16 +4,59 @@ import React, { useState } from "react";
 import Image from "next/image";
 import contactImage from "@/assets/images/contact/contact.png";
 import { FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa";
+import {
+  InputElement,
+  TextareaElement,
+} from "@/components/common/form-element";
 
 export default function ContactUs() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [message, setMessage] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    message: "",
+  });
+
+  const [errors, setErrors] = useState({
+    name: null,
+    email: null,
+    mobile: null,
+    message: null,
+  } as Record<string, string | null>);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: null }));
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleBlur = (field: string) => {
+    // if (!formData[field as keyof typeof formData]) {
+    //   setErrors((prev) => ({ ...prev, [field]: `${field} is required` }));
+    // }
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log({ name, email, mobile, message });
+
+    let hasError = false;
+    const newErrors: Record<string, string | null> = {};
+
+    Object.entries(formData).forEach(([key, value]) => {
+      if (!value.trim()) {
+        newErrors[key] = `${key} is required`;
+        hasError = true;
+      }
+    });
+
+    setErrors(newErrors);
+
+    if (!hasError) {
+      console.log("Submitted data:", formData);
+    }
   };
 
   return (
@@ -130,49 +173,65 @@ export default function ContactUs() {
               className="w-full h-full object-contain rounded-2xl"
             />
           </div>
-          {/* Right: Form */}
           <div className="bg-white dark:bg-dropdown p-8 rounded-2xl shadow-sm">
             <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-6">
               Send us message
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <input
-                type="text"
+              <InputElement
+                title="Your Name"
                 placeholder="Your name *"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full p-3 bg-transparent border border-gray-300 dark:border-gray-600 rounded-lg text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-primary focus:outline-none"
-                required
+                type="text"
+                name="name"
+                value={formData.name}
+                isRequired
+                error={errors.name}
+                onChange={handleChange}
+                onBlur={() => handleBlur("name")}
               />
-              <input
-                type="email"
+
+              <InputElement
+                title="Email"
                 placeholder="Email address *"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-3 bg-transparent border border-gray-300 dark:border-gray-600 rounded-lg text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-primary focus:outline-none"
-                required
+                type="email"
+                name="email"
+                value={formData.email}
+                isRequired
+                error={errors.email}
+                onChange={handleChange}
+                onBlur={() => handleBlur("email")}
               />
-              <input
-                type="tel"
+
+              <InputElement
+                title="Mobile"
                 placeholder="Mobile number *"
-                value={mobile}
-                onChange={(e) => setMobile(e.target.value)}
-                className="w-full p-3 bg-transparent border border-gray-300 dark:border-gray-600 rounded-lg text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-primary focus:outline-none"
-                required
+                type="tel"
+                name="mobile"
+                value={formData.mobile}
+                isRequired
+                error={errors.mobile}
+                onChange={handleChange}
+                onBlur={() => handleBlur("mobile")}
               />
-              <textarea
+
+              <TextareaElement
+                title="Message"
                 placeholder="Message *"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                className="w-full p-3 bg-transparent border border-gray-300 dark:border-gray-600 rounded-lg text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-primary focus:outline-none h-32 resize-none"
-                required
-              ></textarea>
+                name="message"
+                value={formData.message}
+                isRequired
+                error={errors.message}
+                onChange={handleChange}
+                onBlur={() => handleBlur("message")}
+              />
+
               <p className="text-sm text-gray-600 dark:text-gray-300">
                 By submitting this form you agree to our terms and conditions.
               </p>
+
               <button
                 type="submit"
-                className="w-full text-white font-semibold py-3 rounded-lg transition-colors duration-300 bg-dropdown dark:bg-dark"
+                className="w-full text-white font-semibold py-3 rounded-lg transition-colors duration-300 bg-dropdown dark:bg-dark cursor-pointer"
               >
                 Send Message
               </button>
