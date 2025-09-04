@@ -9,9 +9,7 @@ interface Props {
   value: string | number;
   name: string;
   error: string | null;
-  onChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur: () => void;
   inputMode?: React.InputHTMLAttributes<HTMLInputElement>["inputMode"];
   disabled?: boolean;
@@ -39,7 +37,7 @@ const InputElement: React.FC<Props> = ({
   maxLength,
 }) => {
   return (
-    <div className="w-full mb-4">
+    <div className="w-full">
       <label htmlFor={name} className="block text-normal font-medium mb-1">
         {title} {isRequired && <span className="text-red-500">*</span>}
       </label>

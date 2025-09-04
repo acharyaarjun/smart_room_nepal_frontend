@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
+import { usePathname } from "next/navigation";
 
 interface DropdownProps {
   trigger: React.ReactNode;
@@ -21,6 +22,7 @@ export default function Dropdown({
 }: DropdownProps) {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname(); // 👈 get current URL
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -33,12 +35,8 @@ export default function Dropdown({
         onClose?.();
       }
     }
-
     document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
 
   // Close dropdown if user scrolls outside the dropdown
@@ -53,14 +51,15 @@ export default function Dropdown({
 
     if (open) {
       document.addEventListener("scroll", handleScroll, true);
-    } else {
-      document.removeEventListener("scroll", handleScroll, true);
     }
-
-    return () => {
-      document.removeEventListener("scroll", handleScroll, true);
-    };
+    return () => document.removeEventListener("scroll", handleScroll, true);
   }, [open, onClose]);
+
+  // 👇 Close dropdown when URL/pathname changes
+  useEffect(() => {
+    setOpen(false);
+    onClose?.();
+  }, [pathname, onClose]);
 
   return (
     <div

@@ -2,6 +2,7 @@
 import React from "react";
 import { FaUser } from "react-icons/fa";
 import { Dropdown, ThemeToggler } from "@/components/common";
+import Link from "next/link";
 
 export default function ProfileDropdown() {
   const dropdownText = "text-normal";
@@ -17,17 +18,37 @@ export default function ProfileDropdown() {
       triggerMode="click"
     >
       <ul className={`flex flex-col text-base min-w-[200px] ${dropdownText}`}>
-        <li className="px-4 py-2 hover:bg-primary/10 cursor-pointer rounded-md font-medium">
-          Dashboard
+        <li>
+          <Link
+            href="/login"
+            className="block w-full px-4 py-2 hover:bg-primary/10 font-medium rounded-md"
+          >
+            Login
+          </Link>
         </li>
-        <li className="px-4 py-2 hover:bg-primary/10 cursor-pointer rounded-md font-medium">
-          Profile
+        <li>
+          <Link
+            href="/profile"
+            className="block w-full px-4 py-2 hover:bg-primary/10 font-medium rounded-md"
+          >
+            Profile
+          </Link>
         </li>
-        <li className="px-4 py-2 hover:bg-primary/10 cursor-pointer rounded-md font-medium">
-          Settings
+        <li>
+          <Link
+            href="/settings"
+            className="block w-full px-4 py-2 hover:bg-primary/10 font-medium rounded-md"
+          >
+            Settings
+          </Link>
         </li>
-        <li className="px-4 py-2 hover:bg-danger/10 cursor-pointer rounded-md text-danger font-medium">
-          Sign Out
+        <li>
+          <Link
+            href="/logout"
+            className="block w-full px-4 py-2 hover:bg-danger/10 text-danger font-medium rounded-md"
+          >
+            Sign Out
+          </Link>
         </li>
 
         <hr className="border-gray-200 dark:border-gray-700 my-1" />

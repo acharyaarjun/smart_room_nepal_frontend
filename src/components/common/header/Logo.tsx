@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 interface Props {
   appName: string;
@@ -6,7 +7,10 @@ interface Props {
 
 export default function Logo({ appName }: Props) {
   return (
-    <div className="flex justify-between items-center w-full md:w-auto">
+    <Link
+      href={"/"}
+      className="flex justify-between items-center w-full md:w-auto"
+    >
       <Image
         src="/long-logo.png"
         alt="Logo"
@@ -15,6 +19,6 @@ export default function Logo({ appName }: Props) {
         className="h-[55px] w-auto"
         title={appName}
       />
-    </div>
+    </Link>
   );
 }

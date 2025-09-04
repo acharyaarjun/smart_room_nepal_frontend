@@ -1,9 +1,5 @@
 import { User } from "@/types/auth/user";
-import {
-  clearSecureItemsAsync,
-  getItemSecurely,
-  setItemSecurely,
-} from "@/utils/storageUtil";
+import { getItemSecurely, setItemSecurely } from "@/utils/storageUtil";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
@@ -32,7 +28,6 @@ const authSlice = createSlice({
     logout: (state) => {
       state.isAuthenticated = false;
       state.user = null;
-      clearSecureItemsAsync(["user", "accessToken"]);
     },
   },
 });

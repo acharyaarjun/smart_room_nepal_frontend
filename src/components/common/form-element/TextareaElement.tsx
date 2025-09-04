@@ -35,7 +35,7 @@ const TextareaElement: React.FC<Props> = ({
   maxLength,
 }) => {
   return (
-    <div className="w-full mb-4">
+    <div className="w-full">
       <label htmlFor={name} className="block text-normal font-medium mb-1">
         {title} {isRequired && <span className="text-red-500">*</span>}
       </label>
