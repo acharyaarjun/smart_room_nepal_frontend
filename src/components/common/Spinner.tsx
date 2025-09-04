@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function Spinner({
-  color = "text-tertiary",
+  color = "text-primary",
   width = "w-5",
   height = "h-5",
   className = "",

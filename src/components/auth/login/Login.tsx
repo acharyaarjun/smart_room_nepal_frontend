@@ -8,7 +8,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import signInBackground from "@/assets/images/backgrounds/signin.svg";
-import useLogin from "@/hooks/use-login";
+import { useLogin } from "@/hooks";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -160,7 +160,7 @@ const LoginComponent = () => {
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="w-full bg-[#5143d9] hover:bg-[#4338ca] text-white font-semibold py-3 px-4 rounded-lg transition duration-200 shadow-lg hover:shadow-xl"
+                      className="w-full cursor-pointer bg-[#5143d9] hover:bg-[#4338ca] text-white font-semibold py-3 px-4 rounded-lg transition duration-200 shadow-lg hover:shadow-xl"
                     >
                       {isLoading ? "Please wait..." : "Login"}
                     </button>

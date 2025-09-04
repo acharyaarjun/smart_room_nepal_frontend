@@ -8,7 +8,7 @@ import { setMessage } from "@/redux/features/common/popupMessageSlice";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Login } from "@/types/auth/guest";
 import { User } from "@/types/auth/user";
-import { clearSecureItemsAsync, setItemSecurely } from "@/utils/storageUtil";
+import { clearSecureItems, setItemSecurely } from "@/utils/storageUtil";
 
 const useLogin = () => {
   const router = useRouter();
@@ -71,11 +71,13 @@ const useLogin = () => {
 
         const user: User = response.data.user;
         dispatch(setAuth({ user }));
+        const userData = JSON.stringify(user);
+        setItemSecurely("user", userData);
 
         if (redirectUrl) {
           router.push(redirectUrl);
         } else {
-          if (user.role === "user" || user.role === "admin") {
+          if (user.role === "admin" || user.role === "user") {
             router.push("/dashboard");
           }
         }
@@ -98,7 +100,7 @@ const useLogin = () => {
       setIsLoading(true);
       await signout();
       dispatch(logout());
-      clearSecureItemsAsync(["accessToken", "user"]);
+      clearSecureItems(["accessToken", "user"]);
       router.push("/");
     } catch (error) {
       console.error("Error logging out:", error);
