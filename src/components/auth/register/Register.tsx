@@ -222,7 +222,7 @@ export default function Register() {
                       />
                       <button
                         type="button"
-                        className="absolute right-3 top-9 text-gray-400 hover:text-gray-600"
+                        className="absolute right-3 top-[39px] text-gray-400 hover:text-gray-600"
                         onClick={() => setShowPassword(!showPassword)}
                       >
                         {showPassword ? (
