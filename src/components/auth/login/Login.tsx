@@ -51,13 +51,13 @@ const LoginComponent = () => {
   return (
     <section id="login" className="w-full py-12">
       <div className="container">
-        <div className="flex justify-center items-center w-full min-h-[calc(100vh-170px)]">
+        <div className="flex justify-center items-center w-full  min-h-[calc(100vh-170px)]">
           {loading ? (
             <div className="w-full relative z-[2] h-full flex justify-center items-center">
               <Spinner color="text-primary" />
             </div>
           ) : (
-            <div className="flex shadow-custom rounded-2xl overflow-hidden bg-light dark:bg-dropdown min-w-[400px]">
+            <div className="flex shadow-custom rounded-2xl overflow-hidden bg-light dark:bg-dropdown min-w-[400px] w-full max-w-4xl">
               <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-8 lg:border-r lg:border-r-gray-200 dark:border-r-gray-700">
                 <Image
                   src={signInBackground}

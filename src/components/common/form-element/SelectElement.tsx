@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import SimpleBar from "simplebar-react";
 
 interface Option {
@@ -39,23 +39,63 @@ const SelectElement: React.FC<Props> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const selectedOption = options.find((opt) => opt.value === value) || null;
 
+  // Function to close dropdown and reset state
+  const closeDropdown = useCallback(() => {
+    setIsOpen(false);
+    onBlur();
+    setSearchTerm("");
+    setHighlightedIndex(-1);
+  }, [onBlur]);
+
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
+    function handleClickOutside(event: Event) {
       if (
         wrapperRef.current &&
         !wrapperRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false);
-        onBlur();
-        setSearchTerm("");
-        setHighlightedIndex(-1);
+        closeDropdown();
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
+
+    function handleResize() {
+      if (isOpen) {
+        closeDropdown();
+      }
+    }
+
+    // function handleScroll() {
+    //   if (isOpen) {
+    //     closeDropdown();
+    //   }
+    // }
+
+    // Only add event listeners when dropdown is open
+    if (isOpen) {
+      // Add listeners after current event loop to prevent immediate closure
+      const timeoutId = setTimeout(() => {
+        document.addEventListener("mousedown", handleClickOutside, true);
+        document.addEventListener("touchstart", handleClickOutside, true);
+        window.addEventListener("resize", handleResize);
+        // window.addEventListener("scroll", handleScroll, true);
+      }, 0);
+
+      return () => {
+        clearTimeout(timeoutId);
+        document.removeEventListener("mousedown", handleClickOutside, true);
+        document.removeEventListener("touchstart", handleClickOutside, true);
+        window.removeEventListener("resize", handleResize);
+        // window.removeEventListener("scroll", handleScroll, true);
+      };
+    }
+
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      // Cleanup function when isOpen changes to false or component unmounts
+      document.removeEventListener("mousedown", handleClickOutside, true);
+      document.removeEventListener("touchstart", handleClickOutside, true);
+      window.removeEventListener("resize", handleResize);
+      // window.removeEventListener("scroll", handleScroll, true);
     };
-  }, [onBlur]);
+  }, [isOpen, closeDropdown]);
 
   useEffect(() => {
     if (isOpen && inputRef.current) {
@@ -70,8 +110,12 @@ const SelectElement: React.FC<Props> = ({
     setHighlightedIndex(-1);
   };
 
-  const handleToggle = () => {
+  const handleToggle = (e?: React.MouseEvent) => {
     if (!disabled) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
       setIsOpen(!isOpen);
       setHighlightedIndex(-1);
       setSearchTerm("");
@@ -105,10 +149,7 @@ const SelectElement: React.FC<Props> = ({
         }
         break;
       case "Escape":
-        setIsOpen(false);
-        onBlur();
-        setSearchTerm("");
-        setHighlightedIndex(-1);
+        closeDropdown();
         break;
       default:
         break;
@@ -170,7 +211,7 @@ const SelectElement: React.FC<Props> = ({
           }
           ${isOpen && "border-primary"}
         `}
-        onClick={handleToggle}
+        onClick={(e) => handleToggle(e)}
         onKeyDown={handleKeyDown}
         tabIndex={0}
       >

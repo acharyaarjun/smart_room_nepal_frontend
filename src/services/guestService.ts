@@ -101,3 +101,13 @@ export const verifyEmail = async (otp: string, email: string) => {
   );
   return response.data;
 };
+
+export const register = async (formData: any) => {
+  const response = await axiosInstance.post(AppApis.auth.register, formData, {
+    isAuthRoute: false,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};

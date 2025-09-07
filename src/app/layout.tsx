@@ -6,6 +6,7 @@ import AppUrl from "@/utils/appConsts";
 import AppConsts from "@/utils/appConsts";
 import { Navbar } from "@/components/common/header";
 import Footer from "@/components/common/footer/Footer";
+import { ToastUtils } from "@/utils";
 
 const livvic = Livvic({
   subsets: ["latin"],
@@ -59,6 +60,8 @@ export default function RootLayout({
             <CustomThemeProvider>
               <Navbar />
               {children}
+
+              <ToastUtils />
               <Footer />
             </CustomThemeProvider>
           </StoreProvider>
