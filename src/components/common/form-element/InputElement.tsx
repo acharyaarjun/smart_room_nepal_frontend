@@ -13,8 +13,8 @@ interface Props {
   onBlur: () => void;
   inputMode?: React.InputHTMLAttributes<HTMLInputElement>["inputMode"];
   disabled?: boolean;
-  min?: number;
-  max?: number;
+  min?: number | string;
+  max?: number | string;
   minLength?: number;
   maxLength?: number;
 }
