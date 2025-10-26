@@ -18,7 +18,9 @@ import { AppConsts } from "@/utils";
 export default function Sidebar() {
   const dispatch = useDispatch();
   const { isOpen } = useSelector((state: RootState) => state.sidebar);
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user, availableCredits } = useSelector(
+    (state: RootState) => state.auth
+  );
 
   const pathname = usePathname();
   const { handleLogout, isLoading } = useLogin();
@@ -141,11 +143,13 @@ export default function Sidebar() {
             {/* Sidebar Menu */}
             {filteredMenuData.map((menu: SidebarMenu) => {
               const isActive = isMenuActive(menu.link);
+              const showBadge = menu.badge && availableCredits === 0;
+
               return (
                 <Link
                   key={menu.id}
                   href={menu.link}
-                  className={`w-full flex items-center px-2 py-1.5 my-1 rounded-lg cursor-pointer group transition-all ${
+                  className={`w-full flex items-center px-2 py-1.5 my-1 rounded-lg cursor-pointer group transition-all relative ${
                     isActive
                       ? "bg-gray-100 dark:bg-gray-800 text-primary"
                       : "text-normal hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary"
@@ -153,6 +157,9 @@ export default function Sidebar() {
                 >
                   <div className="w-[30px] h-[30px] flex items-center justify-center relative">
                     <menu.icon className="text-xl" />
+                    {showBadge && (
+                      <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                    )}
                   </div>
                   <AnimatePresence>
                     <motion.div
@@ -161,11 +168,16 @@ export default function Sidebar() {
                       animate={{ opacity: 1, width: "auto", marginLeft: 0 }}
                       exit={{ opacity: 0, width: 0, marginLeft: 0 }}
                       transition={{ duration: 0.3 }}
-                      className="overflow-hidden max-w-[calc(100%-30px)]"
+                      className="overflow-hidden max-w-[calc(100%-30px)] flex items-center gap-2"
                     >
                       <span className="font-medium group-hover:pl-1 transition-all duration-300 text-nowrap">
                         {menu.title}
                       </span>
+                      {showBadge && (
+                        <span className="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-semibold">
+                          0
+                        </span>
+                      )}
                     </motion.div>
                   </AnimatePresence>
                 </Link>

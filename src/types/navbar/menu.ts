@@ -12,4 +12,5 @@ export type SidebarMenu = {
   link: string;
   icon: IconType;
   roles?: string[]; // Optional: restrict menu item to specific roles
+  badge?: boolean; // Optional: show badge indicator
 };

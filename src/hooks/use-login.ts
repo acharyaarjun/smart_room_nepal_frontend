@@ -70,9 +70,11 @@ const useLogin = () => {
         setItemSecurely("accessToken", accessToken);
 
         const user: User = response.data.user;
-        dispatch(setAuth({ user }));
+        const availableCredits = response.data?.availableCredits || 0;
+        dispatch(setAuth({ user, availableCredits }));
         const userData = JSON.stringify(user);
         setItemSecurely("user", userData);
+        setItemSecurely("availableCredits", availableCredits.toString());
 
         if (redirectUrl) {
           router.push(redirectUrl);
@@ -100,7 +102,7 @@ const useLogin = () => {
       setIsLoading(true);
       await signout();
       dispatch(logout());
-      clearSecureItems(["accessToken", "user"]);
+      clearSecureItems(["accessToken", "user", "availableCredits"]);
       router.push("/");
     } catch (error) {
       console.error("Error logging out:", error);

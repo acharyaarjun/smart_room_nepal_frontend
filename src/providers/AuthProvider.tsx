@@ -33,7 +33,13 @@ const AuthProvider = ({
 
         if (user) {
           const parsedUser: User = JSON.parse(user);
-          dispatch(setAuth({ user: parsedUser }));
+          const availableCreditsString =
+            (await getItemSecurelyAsync("availableCredits")) || "0";
+          const availableCredits = parseInt(
+            availableCreditsString.toLocaleString(),
+            10
+          );
+          dispatch(setAuth({ user: parsedUser, availableCredits }));
           const userRole = parsedUser?.role as string;
 
           if (roles && roles.length > 0 && !roles.includes(userRole)) {

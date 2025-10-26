@@ -1,9 +1,12 @@
 import { AppConsts } from "@/utils";
 import { SidebarMenu } from "@/types/navbar/menu";
-import { MdOutlineDashboardCustomize } from "react-icons/md";
+import {
+  MdOutlineDashboardCustomize,
+  MdOutlineMeetingRoom,
+} from "react-icons/md";
 import { PiCardholderBold } from "react-icons/pi";
 import { IoSettingsOutline } from "react-icons/io5";
-import { MdOutlineMeetingRoom } from "react-icons/md";
+import { RiVipCrownLine } from "react-icons/ri";
 
 export const SidebarMenuData: SidebarMenu[] = [
   {
@@ -24,6 +27,14 @@ export const SidebarMenuData: SidebarMenu[] = [
     link: AppConsts.DASHBOARD_ROOMS_URL,
     icon: MdOutlineMeetingRoom,
     roles: ["host"], // Only visible to hosts
+  },
+  {
+    id: 4,
+    title: "Membership",
+    link: AppConsts.DASHBOARD_MEMBERSHIP_URL,
+    icon: RiVipCrownLine,
+    roles: ["host"], // Only visible to hosts
+    badge: true, // Show badge when credits are low
   },
   {
     id: 5,

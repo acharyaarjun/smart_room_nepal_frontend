@@ -35,6 +35,14 @@ const AppApis = {
   amenities: {
     all: `/api/${API_VERSION}/amenities`,
   },
+  membershipType: {
+    all: `/api/${API_VERSION}/membership-types`,
+    getSingle: (slug: string) => `/api/${API_VERSION}/membership-types/${slug}`,
+  },
+  membership: {
+    create: `/api/${API_VERSION}/membership`,
+    getPayment: `/api/${API_VERSION}/membership/payments`,
+  },
   rooms: {
     create: `/api/${API_VERSION}/rooms`,
     getByHost: `/api/${API_VERSION}/rooms/host`,
