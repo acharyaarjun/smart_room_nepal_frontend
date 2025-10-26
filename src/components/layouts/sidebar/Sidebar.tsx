@@ -13,6 +13,7 @@ import { Spinner } from "@/components/common";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { toggleSidebar } from "@/redux/features/common/sidebarSlice";
+import { AppConsts } from "@/utils";
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -22,12 +23,36 @@ export default function Sidebar() {
   const pathname = usePathname();
   const { handleLogout, isLoading } = useLogin();
 
+  // Filter menu items based on user role
+  const filteredMenuData = SidebarMenuData.filter((menu) => {
+    if (!menu.roles || menu.roles.length === 0) {
+      return true; // No role restriction
+    }
+    return user?.role && menu.roles.includes(user.role);
+  });
+
+  // Helper function to check if menu item is active
+  const isMenuActive = (menuLink: string) => {
+    // Exact match
+    if (pathname === menuLink) return true;
+
+    // For "My Rooms" menu, also match /dashboard/rooms/add and /dashboard/rooms/edit
+    if (
+      menuLink === AppConsts.DASHBOARD_ROOMS_URL &&
+      pathname.startsWith("/dashboard/rooms")
+    ) {
+      return true;
+    }
+
+    return false;
+  };
+
   return (
     <>
       <div className="fixed lg:hidden bottom-0 left-0 w-full h-[60px] bg-light dark:bg-dropdown shadow-md border-t border-gray-300 dark:border-gray-700 z-50 pb-safe">
         <div className="flex justify-around items-center px-2 py-3 w-full h-full">
-          {SidebarMenuData.map((menu: SidebarMenu) => {
-            const isActive = pathname === menu.link;
+          {filteredMenuData.map((menu: SidebarMenu) => {
+            const isActive = isMenuActive(menu.link);
             return (
               <Link
                 key={menu.id}
@@ -114,8 +139,8 @@ export default function Sidebar() {
             </div>
 
             {/* Sidebar Menu */}
-            {SidebarMenuData.map((menu: SidebarMenu) => {
-              const isActive = pathname === menu.link;
+            {filteredMenuData.map((menu: SidebarMenu) => {
+              const isActive = isMenuActive(menu.link);
               return (
                 <Link
                   key={menu.id}

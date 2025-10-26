@@ -115,3 +115,7 @@ body {
 .text-normal {
   @apply text-gray-600 dark:text-gray-300;
 }
+
+button {
+  @apply cursor-pointer;
+}

@@ -29,6 +29,21 @@ const AppApis = {
     changePassword: `/api/${API_VERSION}/users/change-password`,
     updateProfile: `/api/${API_VERSION}/users/profile`,
   },
+  districts: {
+    all: `/api/${API_VERSION}/districts`,
+  },
+  rooms: {
+    create: `/api/${API_VERSION}/rooms`,
+    getByHost: `/api/${API_VERSION}/rooms/host`,
+    getSingleForHost: (slug: string) => `/api/${API_VERSION}/rooms/${slug}`,
+    update: (slug: string) => `/api/${API_VERSION}/rooms/${slug}`,
+    delete: (slug: string) => `/api/${API_VERSION}/rooms/${slug}`,
+
+    // for normal users
+    get: `/api/${API_VERSION}/rooms`,
+    getSingleForUser: (slug: string) =>
+      `/api/${API_VERSION}/rooms/${slug}/user`,
+  },
 };
 
 export default AppApis;

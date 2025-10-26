@@ -140,14 +140,14 @@ const LoginComponent = () => {
                     <div className="flex items-center justify-between">
                       <div>
                         {" "}
-                        <CheckboxElement
+                        {/* <CheckboxElement
                           title="Remember me?"
                           name="rememberMe"
                           value={false}
                           error={null}
                           onChange={() => console.log("Remember me changed")}
                           onBlur={() => console.log("Remember me blurred")}
-                        />
+                        /> */}
                       </div>
                       <Link
                         href="#"

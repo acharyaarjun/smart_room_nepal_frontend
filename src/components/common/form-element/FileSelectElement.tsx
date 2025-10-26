@@ -204,13 +204,11 @@ const FileSelectElement: React.FC<Props> = ({
 
   // Lightbox Handlers
   const openModal = (src: string) => {
-    console.log("Opening modal with src:", src); // Debug log
     setModalImageSrc(src);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
-    console.log("Closing modal"); // Debug log
     setIsModalOpen(false);
     setModalImageSrc(null);
   };

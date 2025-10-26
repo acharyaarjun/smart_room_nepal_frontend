@@ -11,4 +11,5 @@ export type SidebarMenu = {
   title: string;
   link: string;
   icon: IconType;
+  roles?: string[]; // Optional: restrict menu item to specific roles
 };

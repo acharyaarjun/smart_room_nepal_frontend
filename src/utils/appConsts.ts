@@ -19,6 +19,9 @@ const AppConsts = {
   DASHBOARD_INVITATIONS_URL: "/dashboard/invitations",
   DASHBOARD_NOTIFICATIONS_URL: "/dashboard/notifications",
   DASHBOARD_SETTINGS_URL: "/dashboard/settings",
+  DASHBOARD_ROOMS_URL: "/dashboard/rooms",
+  DASHBOARD_ROOMS_ADD_URL: "/dashboard/rooms/add",
+  DASHBOARD_ROOMS_EDIT_URL: (slug: string) => `/dashboard/rooms/edit/${slug}`,
 
   // social media links
   TWITTER_URL: "https://twitter.com/smartroomnepal",
