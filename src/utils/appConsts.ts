@@ -25,6 +25,23 @@ const AppConsts = {
   DASHBOARD_ROOMS_VIEW_URL: (slug: string) => `/dashboard/rooms/view/${slug}`,
   DASHBOARD_MEMBERSHIP_URL: "/dashboard/membership",
 
+  // Host Dashboard URLs
+  DASHBOARD_HOST_URL: "/dashboard/host",
+  DASHBOARD_HOST_ROOMS_URL: "/dashboard/host/rooms",
+  DASHBOARD_HOST_ROOMS_ADD_URL: "/dashboard/host/rooms/add",
+  DASHBOARD_HOST_ROOMS_EDIT_URL: (slug: string) =>
+    `/dashboard/host/rooms/edit/${slug}`,
+  DASHBOARD_HOST_ROOMS_VIEW_URL: (slug: string) =>
+    `/dashboard/host/rooms/view/${slug}`,
+  DASHBOARD_HOST_BOOKINGS_URL: "/dashboard/host/bookings",
+  DASHBOARD_HOST_MEMBERSHIP_URL: "/dashboard/host/membership",
+  DASHBOARD_HOST_SETTINGS_URL: "/dashboard/host/settings",
+
+  // User Dashboard URLs
+  DASHBOARD_USER_URL: "/dashboard/user",
+  DASHBOARD_USER_BOOKINGS_URL: "/dashboard/user/bookings",
+  DASHBOARD_USER_SETTINGS_URL: "/dashboard/user/settings",
+
   // social media links
   TWITTER_URL: "https://twitter.com/smartroomnepal",
   INSTAGRAM_URL: "https://instagram.com/smartroomnepal",

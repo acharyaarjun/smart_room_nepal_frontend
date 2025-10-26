@@ -48,9 +48,9 @@ const HostRegisterComponent = () => {
         router.push(redirect);
       } else {
         if (user.role === "host") {
-          router.push("/host/dashboard");
+          router.push("/dashboard/host");
         } else {
-          router.push("/dashboard");
+          router.push("/dashboard/user");
         }
       }
     } else {

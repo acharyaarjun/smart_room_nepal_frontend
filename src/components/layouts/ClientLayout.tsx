@@ -9,9 +9,10 @@ import { useSelector } from "react-redux";
 
 interface Props {
   children: React.ReactNode;
+  dashboardType?: "host" | "user";
 }
 
-export default function ClientLayout({ children }: Props) {
+export default function ClientLayout({ children, dashboardType }: Props) {
   const { isOpen } = useSelector((state: any) => state.sidebar);
   const { user } = useSelector((state: any) => state.auth);
   const router = useRouter();
@@ -44,7 +45,7 @@ export default function ClientLayout({ children }: Props) {
     <div className="container py-8">
       <div className="flex w-full gap-8 relative">
         {/* Sidebar */}
-        <Sidebar />
+        <Sidebar dashboardType={dashboardType} />
 
         {/* Main Content for XL and up */}
         <motion.div

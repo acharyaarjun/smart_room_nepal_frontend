@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SidebarMenuData } from "@/data/sidebar";
+import { HostSidebarMenuData } from "@/data/hostSidebar";
+import { UserSidebarMenuData } from "@/data/userSidebar";
 import { SidebarMenu } from "@/types/navbar/menu";
 import { TbLogout } from "react-icons/tb";
 import { useLogin } from "@/hooks";
@@ -15,7 +17,11 @@ import { RootState } from "@/redux/store";
 import { toggleSidebar } from "@/redux/features/common/sidebarSlice";
 import { AppConsts } from "@/utils";
 
-export default function Sidebar() {
+interface SidebarProps {
+  dashboardType?: "host" | "user";
+}
+
+export default function Sidebar({ dashboardType }: SidebarProps) {
   const dispatch = useDispatch();
   const { isOpen } = useSelector((state: RootState) => state.sidebar);
   const { user, availableCredits } = useSelector(
@@ -25,8 +31,16 @@ export default function Sidebar() {
   const pathname = usePathname();
   const { handleLogout, isLoading } = useLogin();
 
-  // Filter menu items based on user role
-  const filteredMenuData = SidebarMenuData.filter((menu) => {
+  // Select the appropriate sidebar menu based on dashboardType
+  let menuData: SidebarMenu[] = SidebarMenuData;
+  if (dashboardType === "host") {
+    menuData = HostSidebarMenuData;
+  } else if (dashboardType === "user") {
+    menuData = UserSidebarMenuData;
+  }
+
+  // Filter menu items based on user role (if not using dashboardType)
+  const filteredMenuData = menuData.filter((menu) => {
     if (!menu.roles || menu.roles.length === 0) {
       return true; // No role restriction
     }
@@ -38,7 +52,55 @@ export default function Sidebar() {
     // Exact match
     if (pathname === menuLink) return true;
 
-    // For "My Rooms" menu, also match /dashboard/rooms/add and /dashboard/rooms/edit
+    // For "My Rooms" menu in host dashboard
+    if (
+      menuLink === "/dashboard/host/rooms" &&
+      pathname.startsWith("/dashboard/host/rooms")
+    ) {
+      return true;
+    }
+
+    // For host bookings
+    if (
+      menuLink === "/dashboard/host/bookings" &&
+      pathname.startsWith("/dashboard/host/bookings")
+    ) {
+      return true;
+    }
+
+    // For host settings
+    if (
+      menuLink === "/dashboard/host/settings" &&
+      pathname.startsWith("/dashboard/host/settings")
+    ) {
+      return true;
+    }
+
+    // For host membership
+    if (
+      menuLink === "/dashboard/host/membership" &&
+      pathname.startsWith("/dashboard/host/membership")
+    ) {
+      return true;
+    }
+
+    // For user bookings
+    if (
+      menuLink === "/dashboard/user/bookings" &&
+      pathname.startsWith("/dashboard/user/bookings")
+    ) {
+      return true;
+    }
+
+    // For user settings
+    if (
+      menuLink === "/dashboard/user/settings" &&
+      pathname.startsWith("/dashboard/user/settings")
+    ) {
+      return true;
+    }
+
+    // For backward compatibility with old dashboard rooms URL
     if (
       menuLink === AppConsts.DASHBOARD_ROOMS_URL &&
       pathname.startsWith("/dashboard/rooms")
@@ -70,6 +132,7 @@ export default function Sidebar() {
 
           <button
             title="Logout"
+            onClick={!isLoading ? handleLogout : undefined}
             className="flex flex-col items-center justify-center text-xs text-gray-500 hover:text-primary transition-all"
           >
             <TbLogout className="text-xl mb-1" />

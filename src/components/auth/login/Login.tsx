@@ -41,7 +41,14 @@ const LoginComponent = () => {
       if (redirect) {
         router.push(redirect);
       } else {
-        router.push("/dashboard");
+        // Redirect to role-specific dashboard
+        if (user.role === "host") {
+          router.push("/dashboard/host");
+        } else if (user.role === "user" || user.role === "admin") {
+          router.push("/dashboard/user");
+        } else {
+          router.push("/dashboard");
+        }
       }
     } else {
       setLoading(false);

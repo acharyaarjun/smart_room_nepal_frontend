@@ -14,6 +14,16 @@ const ProfileDropdownComponent = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { isLoading, handleLogout } = useLogin();
 
+  // Determine dashboard URL based on user role
+  const dashboardUrl =
+    user?.role === "host" ? "/dashboard/host" : "/dashboard/user";
+
+  // Determine settings URL based on user role
+  const settingsUrl =
+    user?.role === "host"
+      ? "/dashboard/host/settings"
+      : "/dashboard/user/settings";
+
   return (
     <Dropdown
       trigger={
@@ -43,7 +53,7 @@ const ProfileDropdownComponent = () => {
           <>
             <li>
               <Link
-                href="/dashboard"
+                href={dashboardUrl}
                 className="block w-full px-4 py-2 hover:bg-primary/10 font-medium rounded-md"
               >
                 Dashboard
@@ -51,7 +61,7 @@ const ProfileDropdownComponent = () => {
             </li>
             <li>
               <Link
-                href="/settings"
+                href={settingsUrl}
                 className="block w-full px-4 py-2 hover:bg-primary/10 font-medium rounded-md"
               >
                 Settings

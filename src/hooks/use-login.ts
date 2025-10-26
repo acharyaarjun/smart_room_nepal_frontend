@@ -79,7 +79,13 @@ const useLogin = () => {
         if (redirectUrl) {
           router.push(redirectUrl);
         } else {
-          if (user.role === "admin" || user.role === "user") {
+          // Redirect based on user role
+          if (user.role === "host") {
+            router.push("/dashboard/host");
+          } else if (user.role === "user" || user.role === "admin") {
+            router.push("/dashboard/user");
+          } else {
+            // Fallback
             router.push("/dashboard");
           }
         }

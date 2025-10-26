@@ -1,45 +1,31 @@
-import { AppConsts } from "@/utils";
-import { Metadata } from "next";
-import React from "react";
-import AppUrl from "@/utils/appConsts";
-import { Dashboard } from "@/components/dashboard";
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { Spinner } from "@/components/common";
 
-export const metadata: Metadata = {
-  title: AppConsts.APP_NAME + " | Dashboard",
-  description: AppConsts.APP_DESCRIPTION,
-  openGraph: {
-    type: "website",
-    locale: "en_IE",
-    url: new URL(`${AppUrl.APP_BASE_URL}/dashboard`),
-    images: [
-      {
-        url: `${AppUrl.APP_BASE_URL}/logo.png`,
-        width: 800,
-        height: 600,
-        alt: "Og Image Alt",
-      },
-    ],
-  },
-  twitter: {
-    site: AppConsts.APP_CREATOR,
-    title: AppConsts.APP_NAME,
-    description: AppConsts.APP_DESCRIPTION,
-    creator: AppConsts.APP_CREATOR,
-    images: [
-      {
-        url: `${AppUrl.APP_BASE_URL}/logo.png`,
-        width: 800,
-        height: 600,
-        alt: "Og Image Alt",
-      },
-    ],
-  },
-};
+export default function DashboardPage() {
+  const router = useRouter();
+  const { user } = useSelector((state: RootState) => state.auth);
 
-export default function page() {
+  useEffect(() => {
+    if (user) {
+      // Redirect based on user role
+      if (user.role === "host") {
+        router.replace("/dashboard/host");
+      } else if (user.role === "user" || user.role === "admin") {
+        router.replace("/dashboard/user");
+      } else {
+        // Fallback for unknown roles
+        router.replace("/");
+      }
+    }
+  }, [user, router]);
+
   return (
-    <>
-      <Dashboard />
-    </>
+    <div className="fixed inset-0 z-[9999] flex h-screen w-screen items-center justify-center bg-gray-100 dark:bg-dark">
+      <Spinner />
+    </div>
   );
 }
