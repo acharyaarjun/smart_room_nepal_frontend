@@ -1,16 +1,23 @@
 "use client";
 import { Room } from "@/types/host/room";
 import Image from "next/image";
-import { FiEdit2, FiMapPin, FiUsers, FiDollarSign } from "react-icons/fi";
+import {
+  FiEdit2,
+  FiMapPin,
+  FiUsers,
+  FiDollarSign,
+  FiEye,
+} from "react-icons/fi";
 import RoomStatus from "@/enums/roomStatus";
 import { getProxiedImageUrl } from "@/utils";
 
 interface Props {
   room: Room;
   onEdit: (slug: string) => void;
+  onView: (slug: string) => void;
 }
 
-export default function RoomCard({ room, onEdit }: Props) {
+export default function RoomCard({ room, onEdit, onView }: Props) {
   const getStatusColor = (status: string) => {
     switch (status) {
       case RoomStatus.APPROVED:
@@ -107,6 +114,13 @@ export default function RoomCard({ room, onEdit }: Props) {
               Created: {new Date(room.createdAt).toLocaleDateString()}
             </span>
             <div className="flex gap-2">
+              <button
+                onClick={() => onView(room.slug)}
+                className="flex items-center gap-1 px-3 py-1.5 text-sm bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-md hover:bg-green-100 dark:hover:bg-green-900/50 transition-colors"
+              >
+                <FiEye className="w-4 h-4" />
+                View
+              </button>
               <button
                 onClick={() => onEdit(room.slug)}
                 className="flex items-center gap-1 px-3 py-1.5 text-sm bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"

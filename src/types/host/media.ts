@@ -2,7 +2,11 @@ import { Media } from "../common/media";
 
 export type RoomMedia = {
   id: number;
-  createdAt: string;
   updatedAt: string;
+  createdAt: string;
   media: Media;
+};
+
+export type RoomMediaForm = {
+  medias: File[];
 };

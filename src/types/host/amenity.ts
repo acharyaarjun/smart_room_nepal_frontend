@@ -8,7 +8,12 @@ export type RoomAmenity = {
     name: string;
     description: string | null;
     icon: string;
-    createdAt: string;
     updatedAt: string;
+    createdAt: string;
   };
+};
+
+export type AmenityForm = {
+  amenityId: number;
+  description: string | null;
 };

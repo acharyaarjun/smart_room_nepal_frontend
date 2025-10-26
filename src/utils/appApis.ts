@@ -32,6 +32,9 @@ const AppApis = {
   districts: {
     all: `/api/${API_VERSION}/districts`,
   },
+  amenities: {
+    all: `/api/${API_VERSION}/amenities`,
+  },
   rooms: {
     create: `/api/${API_VERSION}/rooms`,
     getByHost: `/api/${API_VERSION}/rooms/host`,
@@ -43,6 +46,20 @@ const AppApis = {
     get: `/api/${API_VERSION}/rooms`,
     getSingleForUser: (slug: string) =>
       `/api/${API_VERSION}/rooms/${slug}/user`,
+    media: {
+      create: (slug: string) => `/api/${API_VERSION}/rooms/medias/${slug}`,
+      get: (slug: string) => `/api/${API_VERSION}/rooms/medias/${slug}`,
+      delete: (mediaId: number) =>
+        `/api/${API_VERSION}/rooms/medias/${mediaId}`,
+    },
+    amenities: {
+      get: (slug: string) => `/api/${API_VERSION}/rooms/amenities/${slug}`,
+      create: (slug: string) => `/api/${API_VERSION}/rooms/amenities/${slug}`,
+      delete: (amenityId: number) =>
+        `/api/${API_VERSION}/rooms/amenities/${amenityId}`,
+      update: (amenityId: number) =>
+        `/api/${API_VERSION}/rooms/amenities/${amenityId}`,
+    },
   },
 };
 

@@ -7,3 +7,6 @@ export { default as PopupMessage } from "./PopupMessage";
 export { default as Skeleton } from "./Skeleton";
 export { default as DefaultSkeleton } from "./DefaultSkeleton";
 export { default as LocationPicker } from "./LocationPicker";
+export { default as IconComponent } from "./IconComponent";
+export { default as GetIconFromMimeType } from "./GetIconFromMimeType";
+export { default as ConfirmDialog } from "./ConfirmDialog";

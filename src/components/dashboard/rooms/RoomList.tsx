@@ -59,6 +59,10 @@ export default function RoomList() {
     router.push(`/dashboard/rooms/edit?slug=${slug}`);
   };
 
+  const handleViewRoom = (slug: string) => {
+    router.push(AppConsts.DASHBOARD_ROOMS_VIEW_URL(slug));
+  };
+
   return (
     <div className="w-full">
       {/* Header */}
@@ -121,7 +125,12 @@ export default function RoomList() {
         <>
           <div className="grid grid-cols-1 gap-4">
             {rooms.map((room) => (
-              <RoomCard key={room.id} room={room} onEdit={handleEditRoom} />
+              <RoomCard
+                key={room.id}
+                room={room}
+                onEdit={handleEditRoom}
+                onView={handleViewRoom}
+              />
             ))}
           </div>
 
