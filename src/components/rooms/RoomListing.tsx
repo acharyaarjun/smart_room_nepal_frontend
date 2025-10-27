@@ -1,7 +1,7 @@
 "use client";
 import { RoomData } from "@/data/room";
 import { Room } from "@/types/room/room";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { SingleRoomItem } from "@/components/rooms";
 import { AnimatePresence } from "framer-motion";
 import {
@@ -9,27 +9,21 @@ import {
   HorizontalFilters,
   SidebarFilters,
 } from "@/components/rooms";
-import {
-  FaCar,
-  FaShieldAlt,
-  FaSnowflake,
-  FaTv,
-  FaUtensils,
-  FaWifi,
-} from "react-icons/fa";
 import { Pagination } from "@/components/common";
 import { Filters } from "@/types/room/filters";
+import { District } from "@/types/user/district";
+import { Amenity } from "@/types/user/amenity";
+import { IconComponent } from "@/components/common";
 
-const availableAmenities = [
-  { id: "wifi", label: "WiFi", icon: FaWifi },
-  { id: "parking", label: "Parking", icon: FaCar },
-  { id: "ac", label: "AC", icon: FaSnowflake },
-  { id: "kitchen", label: "Kitchen", icon: FaUtensils },
-  { id: "tv", label: "TV", icon: FaTv },
-  { id: "security", label: "Security", icon: FaShieldAlt },
-];
+interface RoomListingProps {
+  districts: District[];
+  amenities: Amenity[];
+}
 
-export default function RoomListing() {
+export default function RoomListing({
+  districts,
+  amenities,
+}: RoomListingProps) {
   const [isLongView, setIsLongView] = useState<boolean>(false);
   const [showFilters, setShowFilters] = useState<boolean>(false);
   const [filters, setFilters] = useState<Filters>({
@@ -40,6 +34,16 @@ export default function RoomListing() {
     amenities: [],
     locations: [],
   });
+
+  // Transform amenities to include icons
+  const availableAmenities = useMemo(() => {
+    return amenities.map((amenity) => ({
+      id: amenity.id.toString(),
+      label: amenity.name,
+      icon: IconComponent,
+      iconName: amenity.icon,
+    }));
+  }, [amenities]);
 
   const clearFilters = () => {
     setFilters({
@@ -80,6 +84,7 @@ export default function RoomListing() {
               clearFilters={clearFilters}
               setShowFilters={setShowFilters}
               availableAmenities={availableAmenities}
+              districts={districts}
             />
           )}
         </AnimatePresence>
@@ -91,6 +96,8 @@ export default function RoomListing() {
                 filters={filters}
                 setFilters={setFilters}
                 clearFilters={clearFilters}
+                availableAmenities={availableAmenities}
+                districts={districts}
               />
             </div>
           )}

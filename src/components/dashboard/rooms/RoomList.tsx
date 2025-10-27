@@ -52,15 +52,15 @@ export default function RoomList() {
   };
 
   const handleAddRoom = () => {
-    router.push(AppConsts.DASHBOARD_ROOMS_ADD_URL);
+    router.push(AppConsts.DASHBOARD_HOST_ROOMS_ADD_URL);
   };
 
   const handleEditRoom = (slug: string) => {
-    router.push(`/dashboard/rooms/edit?slug=${slug}`);
+    router.push(`/dashboard/host/rooms/edit?slug=${slug}`);
   };
 
   const handleViewRoom = (slug: string) => {
-    router.push(AppConsts.DASHBOARD_ROOMS_VIEW_URL(slug));
+    router.push(AppConsts.DASHBOARD_HOST_ROOMS_VIEW_URL(slug));
   };
 
   return (

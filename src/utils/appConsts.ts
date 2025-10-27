@@ -14,16 +14,6 @@ const AppConsts = {
   APP_CREATOR: "@smartroomnepal",
 
   // Application URLs
-  DASHBOARD_URL: "/dashboard",
-  DASHBOARD_BOOKINGS_URL: "/dashboard/bookings",
-  DASHBOARD_INVITATIONS_URL: "/dashboard/invitations",
-  DASHBOARD_NOTIFICATIONS_URL: "/dashboard/notifications",
-  DASHBOARD_SETTINGS_URL: "/dashboard/settings",
-  DASHBOARD_ROOMS_URL: "/dashboard/rooms",
-  DASHBOARD_ROOMS_ADD_URL: "/dashboard/rooms/add",
-  DASHBOARD_ROOMS_EDIT_URL: (slug: string) => `/dashboard/rooms/edit/${slug}`,
-  DASHBOARD_ROOMS_VIEW_URL: (slug: string) => `/dashboard/rooms/view/${slug}`,
-  DASHBOARD_MEMBERSHIP_URL: "/dashboard/membership",
 
   // Host Dashboard URLs
   DASHBOARD_HOST_URL: "/dashboard/host",

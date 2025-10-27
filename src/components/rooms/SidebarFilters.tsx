@@ -1,38 +1,29 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import {
-  FaRupeeSign,
-  FaWifi,
-  FaCar,
-  FaSnowflake,
-  FaUtensils,
-  FaTv,
-  FaShieldAlt,
-} from "react-icons/fa";
-import { DistrictData } from "@/data/district";
-import { District } from "@/types/room/district";
+import { FaRupeeSign } from "react-icons/fa";
 import { Filters } from "@/types/room/filters";
+import { District } from "@/types/user/district";
 
 interface SidebarFiltersProps {
   filters: Filters;
   setFilters: React.Dispatch<React.SetStateAction<Filters>>;
   clearFilters: () => void;
+  availableAmenities: {
+    id: string;
+    label: string;
+    icon: React.ComponentType<any>;
+    iconName: string;
+  }[];
+  districts: District[];
 }
 
 const SidebarFilters: React.FC<SidebarFiltersProps> = ({
   filters,
   setFilters,
   clearFilters,
+  availableAmenities,
+  districts,
 }) => {
-  const availableAmenities = [
-    { id: "wifi", label: "WiFi", icon: FaWifi },
-    { id: "parking", label: "Parking", icon: FaCar },
-    { id: "ac", label: "AC", icon: FaSnowflake },
-    { id: "kitchen", label: "Kitchen", icon: FaUtensils },
-    { id: "tv", label: "TV", icon: FaTv },
-    { id: "security", label: "Security", icon: FaShieldAlt },
-  ];
-
   // Local temporary state
   const [tempFilters, setTempFilters] = useState<Filters>({ ...filters });
 
@@ -137,7 +128,7 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
           Locations
         </label>
         <div className="space-y-3 max-h-52 overflow-y-auto">
-          {DistrictData.map((district: District) => (
+          {districts.map((district) => (
             <label
               key={district.id}
               className="flex items-center gap-3 cursor-pointer"
@@ -161,7 +152,7 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
         </label>
         <div className="space-y-3 max-h-52 overflow-y-auto">
           {availableAmenities.map((amenity) => {
-            const IconComponent = amenity.icon;
+            const AmenityIcon = amenity.icon;
             return (
               <label
                 key={amenity.id}
@@ -173,7 +164,10 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
                   onChange={() => handleAmenityChange(amenity.id)}
                   className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
                 />
-                <IconComponent className="text-gray-600 dark:text-gray-400" />
+                <AmenityIcon
+                  icon={amenity.iconName}
+                  className="text-gray-600 dark:text-gray-400"
+                />
                 <span className=" text-normal">{amenity.label}</span>
               </label>
             );

@@ -8,13 +8,18 @@ import {
   WhyChooseUs,
   RecentlyViewed,
 } from "@/components/home";
+import { District } from "@/types/user/district";
 
-export default function Home() {
+interface HomeProps {
+  districts: District[];
+}
+
+export default function Home({ districts }: HomeProps) {
   return (
     <>
       <Hero />
       <WhyChooseUs />
-      <ExploreNearby />
+      <ExploreNearby districts={districts} />
       <FeaturedRooms />
       <BookingProcess />
       <RecentlyViewed />

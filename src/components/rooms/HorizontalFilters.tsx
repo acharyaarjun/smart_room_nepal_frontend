@@ -1,15 +1,21 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { FaSearch, FaRupeeSign, FaTimes } from "react-icons/fa";
-import { DistrictData } from "@/data/district";
 import { Filters } from "@/types/room/filters";
+import { District } from "@/types/user/district";
 
 interface HorizontalFiltersProps {
   filters: Filters;
   setFilters: React.Dispatch<React.SetStateAction<Filters>>;
   clearFilters: () => void;
   setShowFilters: (val: boolean) => void;
-  availableAmenities: { id: string; label: string; icon: React.ElementType }[];
+  availableAmenities: {
+    id: string;
+    label: string;
+    icon: React.ComponentType<any>;
+    iconName: string;
+  }[];
+  districts: District[];
 }
 
 const HorizontalFilters: React.FC<HorizontalFiltersProps> = ({
@@ -18,6 +24,7 @@ const HorizontalFilters: React.FC<HorizontalFiltersProps> = ({
   clearFilters,
   setShowFilters,
   availableAmenities,
+  districts,
 }) => {
   const [tempFilters, setTempFilters] = useState<Filters>({ ...filters });
 
@@ -136,7 +143,7 @@ const HorizontalFilters: React.FC<HorizontalFiltersProps> = ({
       <div className="my-3">
         <label className="block font-medium text-normal mb-2">Locations</label>
         <div className="flex flex-wrap gap-2 overflow-y-auto border border-gray-200 dark:border-gray-700 rounded p-2 max-h-28">
-          {DistrictData.map((district) => (
+          {districts.map((district) => (
             <label
               key={district.id}
               className="flex items-center gap-2 cursor-pointer px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded hover:bg-primary/20 dark:hover:bg-primary/30"
@@ -158,7 +165,7 @@ const HorizontalFilters: React.FC<HorizontalFiltersProps> = ({
         <label className="block font-medium text-normal mb-2">Amenities</label>
         <div className="flex flex-wrap gap-2 overflow-y-auto border border-gray-200 dark:border-gray-700 rounded p-2 max-h-28">
           {availableAmenities.map((amenity) => {
-            const IconComponent = amenity.icon;
+            const AmenityIcon = amenity.icon;
             return (
               <label
                 key={amenity.id}
@@ -170,7 +177,10 @@ const HorizontalFilters: React.FC<HorizontalFiltersProps> = ({
                   onChange={() => handleAmenityChange(amenity.id)}
                   className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
                 />
-                <IconComponent className="text-gray-600 dark:text-gray-400" />
+                <AmenityIcon
+                  icon={amenity.iconName}
+                  className="text-gray-600 dark:text-gray-400"
+                />
                 <span className="text-sm text-normal">{amenity.label}</span>
               </label>
             );

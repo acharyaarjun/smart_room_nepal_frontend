@@ -115,7 +115,7 @@ export default function RoomForm({ action, slug }: Props) {
         } catch (error) {
           console.error("Error fetching room:", error);
           toast.error("Failed to fetch room details", { id: "toast" });
-          router.push(AppConsts.DASHBOARD_ROOMS_URL);
+          router.push(AppConsts.DASHBOARD_HOST_ROOMS_URL);
         } finally {
           setInitialLoading(false);
         }
@@ -319,7 +319,7 @@ export default function RoomForm({ action, slug }: Props) {
       }
 
       if (response.status === 200 || response.status === 201) {
-        router.push(AppConsts.DASHBOARD_ROOMS_URL);
+        router.push(AppConsts.DASHBOARD_HOST_ROOMS_URL);
       }
     } catch (error: any) {
       console.error("Error saving room:", error);
@@ -344,7 +344,7 @@ export default function RoomForm({ action, slug }: Props) {
       {/* Header */}
       <div className="mb-6">
         <button
-          onClick={() => router.push(AppConsts.DASHBOARD_ROOMS_URL)}
+          onClick={() => router.push(AppConsts.DASHBOARD_HOST_ROOMS_URL)}
           className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-primary mb-4"
         >
           <FiArrowLeft className="w-4 h-4" />
@@ -582,7 +582,7 @@ export default function RoomForm({ action, slug }: Props) {
           <div className="flex gap-4 pt-4">
             <button
               type="button"
-              onClick={() => router.push(AppConsts.DASHBOARD_ROOMS_URL)}
+              onClick={() => router.push(AppConsts.DASHBOARD_HOST_ROOMS_URL)}
               className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 text-normal rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               disabled={loading}
             >

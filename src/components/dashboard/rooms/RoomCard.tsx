@@ -47,7 +47,7 @@ export default function RoomCard({ room, onEdit, onView }: Props) {
             <Image
               src={getProxiedImageUrl(room.image.url)}
               alt={room.name}
-              className="object-cover h-full w-full"
+              className="object-cover w-full h-full md:h-60"
               height={400}
               width={400}
               quality={100}

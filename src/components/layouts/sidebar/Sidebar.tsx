@@ -5,7 +5,6 @@ import { FaChevronLeft } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SidebarMenuData } from "@/data/sidebar";
 import { HostSidebarMenuData } from "@/data/hostSidebar";
 import { UserSidebarMenuData } from "@/data/userSidebar";
 import { SidebarMenu } from "@/types/navbar/menu";
@@ -15,7 +14,6 @@ import { Spinner } from "@/components/common";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { toggleSidebar } from "@/redux/features/common/sidebarSlice";
-import { AppConsts } from "@/utils";
 
 interface SidebarProps {
   dashboardType?: "host" | "user";
@@ -32,7 +30,7 @@ export default function Sidebar({ dashboardType }: SidebarProps) {
   const { handleLogout, isLoading } = useLogin();
 
   // Select the appropriate sidebar menu based on dashboardType
-  let menuData: SidebarMenu[] = SidebarMenuData;
+  let menuData: SidebarMenu[] = [];
   if (dashboardType === "host") {
     menuData = HostSidebarMenuData;
   } else if (dashboardType === "user") {
@@ -96,14 +94,6 @@ export default function Sidebar({ dashboardType }: SidebarProps) {
     if (
       menuLink === "/dashboard/user/settings" &&
       pathname.startsWith("/dashboard/user/settings")
-    ) {
-      return true;
-    }
-
-    // For backward compatibility with old dashboard rooms URL
-    if (
-      menuLink === AppConsts.DASHBOARD_ROOMS_URL &&
-      pathname.startsWith("/dashboard/rooms")
     ) {
       return true;
     }

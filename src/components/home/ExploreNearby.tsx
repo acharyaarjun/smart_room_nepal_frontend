@@ -1,9 +1,14 @@
-import { DistrictData } from "@/data/district";
+import { District } from "@/types/user/district";
+import { getProxiedImageUrl } from "@/utils";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-export default function ExploreNearby() {
+interface ExploreNearbyProps {
+  districts: District[];
+}
+
+export default function ExploreNearby({ districts }: ExploreNearbyProps) {
   return (
     <section id="expolore-nearby" className="w-full py-12">
       <div className="container">
@@ -11,10 +16,14 @@ export default function ExploreNearby() {
           <h1 className="font-bold text-5xl capitalize mb-8">Explore Nearby</h1>
         </div>
         <div className="w-full flex flex-wrap justify-center items-center gap-6">
-          {DistrictData.map((district) => (
+          {districts.map((district) => (
             <div key={district.id} className="">
               <Image
-                src={district.image}
+                src={
+                  district.image
+                    ? getProxiedImageUrl(district.image.url)
+                    : "/placeholder.jpg"
+                }
                 alt={district.name}
                 className="w-42 h-42 object-cover rounded-full"
                 width={500}

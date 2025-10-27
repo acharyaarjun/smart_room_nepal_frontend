@@ -42,7 +42,7 @@ export default function RoomDetail({ slug }: Props) {
       } catch (error) {
         console.error("Error fetching room:", error);
         toast.error("Failed to load room details");
-        router.push(AppConsts.DASHBOARD_ROOMS_URL);
+        router.push(AppConsts.DASHBOARD_HOST_ROOMS_URL);
       } finally {
         setLoading(false);
       }
@@ -92,14 +92,14 @@ export default function RoomDetail({ slug }: Props) {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-center gap-4">
           <button
-            onClick={() => router.push(AppConsts.DASHBOARD_ROOMS_URL)}
+            onClick={() => router.push(AppConsts.DASHBOARD_HOST_ROOMS_URL)}
             className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
           >
             <FiArrowLeft className="w-5 h-5" />
           </button>
           <div>
             <h1 className="text-2xl font-bold text-normal">{room.name}</h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 max-w-md">
               {room.shortDescription}
             </p>
           </div>
@@ -113,7 +113,9 @@ export default function RoomDetail({ slug }: Props) {
             {formatStatus(room.roomStatus)}
           </span>
           <button
-            onClick={() => router.push(`/dashboard/rooms/edit?slug=${slug}`)}
+            onClick={() =>
+              router.push(`/dashboard/host/rooms/edit?slug=${slug}`)
+            }
             className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
           >
             <FiEdit2 className="w-4 h-4" />

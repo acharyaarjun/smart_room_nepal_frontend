@@ -1,4 +1,3 @@
-import React from "react";
 import { Membership } from "@/components/dashboard/membership";
 import { Metadata } from "next";
 
