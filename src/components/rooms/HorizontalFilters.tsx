@@ -1,8 +1,11 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { FaSearch, FaRupeeSign, FaTimes } from "react-icons/fa";
 import { Filters } from "@/types/room/filters";
 import { District } from "@/types/user/district";
+import RoomType from "@/enums/roomType";
+import MaxCapacity from "@/enums/maxCapacity";
+import { SelectElement } from "@/components/common/form-element";
 
 interface HorizontalFiltersProps {
   filters: Filters;
@@ -54,6 +57,37 @@ const HorizontalFilters: React.FC<HorizontalFiltersProps> = ({
     setFilters({ ...tempFilters });
     setShowFilters(false); // Optional: close filter panel
   };
+
+  // Convert enums to readable labels
+  const getRoomTypeLabel = (value: string): string => {
+    return value
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
+  const getMaxCapacityLabel = (value: string): string => {
+    return value.replace("_", " ");
+  };
+
+  // Prepare options for select components
+  const roomTypeOptions = useMemo(
+    () =>
+      Object.values(RoomType).map((type) => ({
+        value: type,
+        label: getRoomTypeLabel(type),
+      })),
+    []
+  );
+
+  const maxCapacityOptions = useMemo(
+    () =>
+      Object.values(MaxCapacity).map((capacity) => ({
+        value: capacity,
+        label: getMaxCapacityLabel(capacity),
+      })),
+    []
+  );
 
   return (
     <div className="bg-white dark:bg-dropdown rounded-xl p-6 shadow-custom mb-6">
@@ -136,6 +170,38 @@ const HorizontalFilters: React.FC<HorizontalFiltersProps> = ({
               />
             </div>
           </div>
+        </div>
+
+        {/* Room Type */}
+        <div>
+          <SelectElement
+            title="Room Type"
+            placeholder="Select room type"
+            value={tempFilters.roomType || null}
+            name="roomType"
+            error={null}
+            onChange={(value) =>
+              setTempFilters((prev) => ({ ...prev, roomType: value || "" }))
+            }
+            onBlur={() => {}}
+            options={roomTypeOptions}
+          />
+        </div>
+
+        {/* Max Capacity */}
+        <div>
+          <SelectElement
+            title="Max Capacity"
+            placeholder="Select max capacity"
+            value={tempFilters.maxCapacity || null}
+            name="maxCapacity"
+            error={null}
+            onChange={(value) =>
+              setTempFilters((prev) => ({ ...prev, maxCapacity: value || "" }))
+            }
+            onBlur={() => {}}
+            options={maxCapacityOptions}
+          />
         </div>
       </div>
 

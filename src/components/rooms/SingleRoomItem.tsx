@@ -1,14 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import {
-  FaMapMarkerAlt,
-  FaStar,
-  FaRegBookmark,
-  FaBookmark,
-} from "react-icons/fa";
-import { Room } from "@/types/room/room";
+import { FaMapMarkerAlt, FaRegBookmark, FaBookmark } from "react-icons/fa";
+import { Room } from "@/types/user/room";
 import Link from "next/link";
+import { IconComponent } from "@/components/common";
+import { getProxiedImageUrl } from "@/utils";
+import { toggleWishlist } from "@/services/userService";
+import { toast } from "react-hot-toast";
 
 type SingleRoomItemProps = {
   room: Room;
@@ -19,7 +18,35 @@ export default function SingleRoomItem({
   room,
   isLong = false,
 }: SingleRoomItemProps) {
-  const [saved, setSaved] = useState(false);
+  const [isWishlisted, setIsWishlisted] = useState(room.isWishlisted);
+  const [isTogglingWishlist, setIsTogglingWishlist] = useState(false);
+
+  const handleWishlistToggle = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (isTogglingWishlist) return;
+
+    const previousState = isWishlisted;
+    setIsTogglingWishlist(true);
+
+    try {
+      await toggleWishlist(room.slug);
+      setIsWishlisted(!previousState);
+      toast.success(
+        previousState ? "Removed from wishlist" : "Added to wishlist"
+      );
+    } catch (error: any) {
+      // Revert state on error
+      setIsWishlisted(previousState);
+      const errorMessage =
+        error?.response?.data?.message || "Failed to update wishlist";
+      toast.error(errorMessage);
+      console.error("Error toggling wishlist:", error);
+    } finally {
+      setIsTogglingWishlist(false);
+    }
+  };
 
   // Show all amenities for long card, else first 2
   const visibleAmenities = isLong ? room.amenities : room.amenities.slice(0, 2);
@@ -40,24 +67,20 @@ export default function SingleRoomItem({
         }`}
       >
         <Image
-          src={room.image}
-          alt={room.title}
+          src={
+            room.image?.url
+              ? getProxiedImageUrl(room.image.url)
+              : "/placeholder.jpg"
+          }
+          alt={room.name}
           className="h-full w-full object-cover rounded-xl"
           fill
         />
 
-        {/* Featured Badge */}
-        {room.featured && (
+        {/* Offer Price Badge */}
+        {room.offerPrice && (
           <div className="absolute top-3 right-3 text-xs uppercase py-1 bg-danger font-semibold text-white px-2 rounded-md shadow-md">
-            Featured
-          </div>
-        )}
-
-        {/* Rating badge */}
-        {room.rating && (
-          <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-sm text-white px-2 py-1 rounded-md flex items-center gap-1 text-xs">
-            <FaStar className="text-yellow-400" />
-            {room.rating}
+            Sale
           </div>
         )}
       </div>
@@ -72,14 +95,16 @@ export default function SingleRoomItem({
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 text-sm">
             <FaMapMarkerAlt className="text-xs" />
-            <span>{room.location}</span>
+            <span>{room.district.name}</span>
           </div>
 
           <button
-            onClick={() => setSaved(!saved)}
-            className="text-gray-500 dark:text-gray-300 hover:text-success transition-colors"
+            onClick={handleWishlistToggle}
+            disabled={isTogglingWishlist}
+            className="text-gray-500 dark:text-gray-300 hover:text-success transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            title={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
           >
-            {saved ? (
+            {isWishlisted ? (
               <FaBookmark className="text-success text-lg" />
             ) : (
               <FaRegBookmark className="text-lg" />
@@ -89,10 +114,10 @@ export default function SingleRoomItem({
 
         {/* Title */}
         <Link
-          href={`/rooms/${room.id}`}
+          href={`/rooms/${room.slug}`}
           className="font-bold text-lg md:text-xl text-gray-800 dark:text-white mb-2 line-clamp-1"
         >
-          {room.title}
+          {room.name}
         </Link>
 
         {/* Short Description (only for long card) */}
@@ -104,13 +129,13 @@ export default function SingleRoomItem({
 
         {/* Amenities */}
         <div className="flex flex-wrap gap-3 mb-4">
-          {visibleAmenities.map((amenity, index) => (
+          {visibleAmenities.map((amenity) => (
             <div
-              key={index}
+              key={amenity.id}
               className="flex items-center gap-1 text-normal text-sm"
             >
-              <amenity.icon className="" />
-              <span>{amenity.label}</span>
+              <IconComponent icon={amenity.icon} className="" />
+              <span>{amenity.name}</span>
             </div>
           ))}
 
@@ -123,22 +148,42 @@ export default function SingleRoomItem({
         </div>
 
         {/* Price and Action */}
-        <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
-          <div className="flex items-baseline gap-1">
-            <span className="text-2xl font-bold text-primary">
-              Rs.{room.price}
-            </span>
-            <span className="text-gray-500 dark:text-gray-400 text-sm">
-              /{room.per}
-            </span>
-          </div>
+        <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex flex-col">
+              {room.offerPrice ? (
+                <>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-2xl font-bold text-primary">
+                      Rs.{room.offerPrice}
+                    </span>
+                    <span className="text-gray-500 dark:text-gray-400 text-sm">
+                      /{room.unit}
+                    </span>
+                  </div>
+                  {/* <span className="text-gray-500 dark:text-gray-400 text-sm line-through">
+                    Rs.{room.price}
+                  </span> */}
+                </>
+              ) : (
+                <div className="flex items-baseline gap-1">
+                  <span className="text-2xl font-bold text-primary">
+                    Rs.{room.price}
+                  </span>
+                  <span className="text-gray-500 dark:text-gray-400 text-sm">
+                    /{room.unit}
+                  </span>
+                </div>
+              )}
+            </div>
 
-          <Link
-            href={`/rooms/${room.id}`}
-            className="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300"
-          >
-            View Details
-          </Link>
+            <Link
+              href={`/rooms/${room.slug}`}
+              className="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300 whitespace-nowrap"
+            >
+              View Details
+            </Link>
+          </div>
         </div>
       </div>
     </div>

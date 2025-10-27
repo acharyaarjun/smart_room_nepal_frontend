@@ -1,7 +1,6 @@
 "use client";
-import { RoomData } from "@/data/room";
-import { Room } from "@/types/room/room";
-import React, { useState, useMemo } from "react";
+import { Room } from "@/types/user/room";
+import { useState, useMemo, useEffect } from "react";
 import { SingleRoomItem } from "@/components/rooms";
 import { AnimatePresence } from "framer-motion";
 import {
@@ -14,6 +13,7 @@ import { Filters } from "@/types/room/filters";
 import { District } from "@/types/user/district";
 import { Amenity } from "@/types/user/amenity";
 import { IconComponent } from "@/components/common";
+import { getAllRooms } from "@/services/userService";
 
 interface RoomListingProps {
   districts: District[];
@@ -33,7 +33,15 @@ export default function RoomListing({
     rating: "",
     amenities: [],
     locations: [],
+    maxCapacity: "",
+    roomType: "",
   });
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [totalItems, setTotalItems] = useState<number>(0);
+  const itemsPerPage = 6;
 
   // Transform amenities to include icons
   const availableAmenities = useMemo(() => {
@@ -53,17 +61,49 @@ export default function RoomListing({
       rating: "",
       amenities: [],
       locations: [],
+      maxCapacity: "",
+      roomType: "",
     });
   };
 
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const itemsPerPage = 6;
-  const totalPages = Math.ceil(RoomData.length / itemsPerPage);
+  // Fetch rooms whenever filters or page changes
+  useEffect(() => {
+    const fetchRooms = async () => {
+      setLoading(true);
+      try {
+        const response = await getAllRooms({
+          page: currentPage,
+          size: itemsPerPage,
+          search: filters.search || undefined,
+          minPrice: filters.minPrice ? Number(filters.minPrice) : undefined,
+          maxPrice: filters.maxPrice ? Number(filters.maxPrice) : undefined,
+          roomType: filters.roomType || undefined,
+          maxCapacity: filters.maxCapacity || undefined,
+          districts:
+            filters.locations.length > 0
+              ? filters.locations.join(",")
+              : undefined,
+          amenities:
+            filters.amenities.length > 0
+              ? filters.amenities.join(",")
+              : undefined,
+        });
 
-  const paginatedRooms = RoomData.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+        if (response.status === 200 && response.data) {
+          setRooms(response.data.data || []);
+          setTotalItems(response.data.totalItems || 0);
+          setTotalPages(response.data.totalPages || 1);
+        }
+      } catch (error) {
+        console.error("Error fetching rooms:", error);
+        setRooms([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRooms();
+  }, [filters, currentPage]);
 
   return (
     <section id="room-listing" className="w-full py-12">
@@ -73,7 +113,7 @@ export default function RoomListing({
           setIsLongView={setIsLongView}
           showFilters={showFilters}
           setShowFilters={setShowFilters}
-          totalRooms={RoomData.length}
+          totalRooms={totalItems}
         />
 
         <AnimatePresence>
@@ -103,17 +143,31 @@ export default function RoomListing({
           )}
 
           <div className={`${isLongView ? "w-full lg:w-3/4" : "w-full"}`}>
-            <div
-              className={`grid gap-6 ${
-                isLongView
-                  ? "grid-cols-1"
-                  : "grid-cols-1 md:grid-cols-2 xl:grid-cols-3"
-              }`}
-            >
-              {paginatedRooms.map((room: Room) => (
-                <SingleRoomItem key={room.id} room={room} isLong={isLongView} />
-              ))}
-            </div>
+            {loading ? (
+              <div className="text-center py-12 bg-primary/10 rounded-lg italic text-gray-600 dark:text-gray-300">
+                Loading rooms...
+              </div>
+            ) : rooms.length === 0 ? (
+              <div className="text-center py-12 bg-primary/10 rounded-lg italic text-gray-600 dark:text-gray-300">
+                No rooms found!
+              </div>
+            ) : (
+              <div
+                className={`grid gap-6 ${
+                  isLongView
+                    ? "grid-cols-1"
+                    : "grid-cols-1 md:grid-cols-2 xl:grid-cols-3"
+                }`}
+              >
+                {rooms.map((room: Room) => (
+                  <SingleRoomItem
+                    key={room.id}
+                    room={room}
+                    isLong={isLongView}
+                  />
+                ))}
+              </div>
+            )}
 
             <div className="mt-12">
               <Pagination

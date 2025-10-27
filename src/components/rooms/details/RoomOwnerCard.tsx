@@ -1,4 +1,4 @@
-import { FaPhoneAlt, FaEnvelope, FaStar, FaShieldAlt } from "react-icons/fa";
+import { FaPhoneAlt, FaEnvelope, FaShieldAlt } from "react-icons/fa";
 import { FaCircleCheck } from "react-icons/fa6";
 import Image from "next/image";
 
@@ -8,10 +8,8 @@ interface Props {
   email: string;
   verified?: boolean;
   responseTime?: string;
-  properties?: number;
   joinedDate?: string;
   avatar?: string;
-  rating?: number;
 }
 
 export default function RoomOwnerCard({
@@ -20,10 +18,8 @@ export default function RoomOwnerCard({
   email,
   verified = false,
   responseTime = "Usually within 24 hours",
-  properties = 0,
   joinedDate = "2023",
   avatar,
-  rating = 4.5,
 }: Props) {
   return (
     <div className="bg-white dark:bg-dropdown rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
@@ -68,24 +64,7 @@ export default function RoomOwnerCard({
             )}
           </div>
 
-          <div className="flex items-center gap-1 mb-2">
-            {[...Array(5)].map((_, i) => (
-              <FaStar
-                key={i}
-                className={`text-xs ${
-                  i < Math.floor(rating)
-                    ? "text-yellow-400"
-                    : "text-gray-300 dark:text-gray-600"
-                }`}
-              />
-            ))}
-            <span className="text-sm text-gray-600 dark:text-gray-400 ml-1">
-              {rating}
-            </span>
-          </div>
-
           <div className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-            <p>{properties} properties listed</p>
             <p>Member since {joinedDate}</p>
           </div>
         </div>
@@ -98,7 +77,7 @@ export default function RoomOwnerCard({
         </div>
         <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
           <FaEnvelope className="text-primary text-sm" />
-          <span className="text-sm">{email}</span>
+          <span className="text-sm break-all">{email}</span>
         </div>
       </div>
 

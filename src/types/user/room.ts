@@ -14,12 +14,13 @@ export type Room = {
   createdAt: string;
   updatedAt: string;
   image: Media | null;
+  isWishlisted: boolean;
   district: {
     id: number;
     name: string;
     slug: string;
   };
-  aamenities: {
+  amenities: {
     id: number;
     name: string;
     icon: string;
@@ -42,6 +43,7 @@ export type RoomDetails = {
   latitude: number;
   createdAt: string;
   updatedAt: string;
+  isWishlisted: boolean;
   district: {
     id: number;
     name: string;

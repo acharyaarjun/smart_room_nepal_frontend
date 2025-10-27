@@ -19,7 +19,7 @@ export default function RoomDescription({
 
       <div className="bg-white dark:bg-dropdown rounded-xl border border-gray-200 dark:border-gray-700 p-6">
         <div className="prose prose-gray dark:prose-invert max-w-none">
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-base">
+          <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-base whitespace-pre-line">
             {isExpanded || !shouldTruncate
               ? description
               : `${shortDescription}...`}
@@ -41,27 +41,6 @@ export default function RoomDescription({
               )}
             </button>
           )}
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-primary mb-1">850</div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">
-              Square Feet
-            </div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-primary mb-1">2</div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">
-              Bedrooms
-            </div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-primary mb-1">2</div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">
-              Bathrooms
-            </div>
-          </div>
         </div>
       </div>
     </div>

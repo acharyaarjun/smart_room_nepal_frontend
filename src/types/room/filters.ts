@@ -5,4 +5,6 @@ export type Filters = {
   rating: string;
   amenities: string[];
   locations: string[];
+  maxCapacity: string;
+  roomType: string;
 };

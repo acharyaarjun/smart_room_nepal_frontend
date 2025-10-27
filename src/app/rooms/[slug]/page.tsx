@@ -4,6 +4,8 @@ import React from "react";
 import AppUrl from "@/utils/appConsts";
 import { RoomDetails } from "@/components/rooms/details";
 import { Breadcrumb } from "@/components/common";
+import { getSingleRoom } from "@/services/userService";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: AppConsts.APP_NAME + " | Details",
@@ -37,15 +39,34 @@ export const metadata: Metadata = {
   },
 };
 
-export default function page() {
-  return (
-    <>
-      <Breadcrumb
-        title="Room Details"
-        description="Discover the best rooms available across Nepal, carefully selected for comfort and convenience."
-        breadcrumb={[{ label: "Home", href: "/" }, { label: "Rooms" }]}
-      />
-      <RoomDetails />
-    </>
-  );
+type Params = Promise<{ slug: string }>;
+export default async function page({ params }: { params: Params }) {
+  try {
+    const { slug } = await params;
+    const response = await getSingleRoom(slug);
+
+    if (response.status !== 200 || !response.data) {
+      notFound();
+    }
+
+    const roomData = response.data;
+
+    return (
+      <>
+        <Breadcrumb
+          title={roomData.name}
+          description="Discover the best rooms available across Nepal, carefully selected for comfort and convenience."
+          breadcrumb={[
+            { label: "Home", href: "/" },
+            { label: "Rooms", href: "/rooms" },
+            { label: roomData.name },
+          ]}
+        />
+        <RoomDetails room={roomData} />
+      </>
+    );
+  } catch (error) {
+    console.error("Error fetching room details:", error);
+    notFound();
+  }
 }

@@ -54,6 +54,8 @@ const AppApis = {
     get: `/api/${API_VERSION}/rooms`,
     getSingleForUser: (slug: string) =>
       `/api/${API_VERSION}/rooms/${slug}/user`,
+    wishlist: (slug: string) => `/api/${API_VERSION}/rooms/wishlist/${slug}`,
+
     media: {
       create: (slug: string) => `/api/${API_VERSION}/rooms/medias/${slug}`,
       get: (slug: string) => `/api/${API_VERSION}/rooms/medias/${slug}`,

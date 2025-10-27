@@ -1,4 +1,3 @@
-import { RoomForm as ItemForm } from "@/types/host/room";
 import { AppApis } from "@/utils";
 import axiosInstance from "./apiService";
 
@@ -12,8 +11,9 @@ interface Params {
   minPrice?: number;
   maxPrice?: number;
   roomType?: string;
-  district?: number;
   maxCapacity?: string;
+  districts?: string; // comma separated district slugs
+  amenities?: string; // comma separated amenity IDs
 }
 
 export const getDistricts = async () => {
@@ -39,8 +39,10 @@ export const getAllRooms = async ({
   minPrice,
   maxPrice,
   roomType,
-  district,
   maxCapacity,
+  districts,
+  amenities,
+  isFeatured,
 }: Params) => {
   const params: Params = {
     page: page,
@@ -52,12 +54,19 @@ export const getAllRooms = async ({
   if (minPrice !== undefined) params.minPrice = minPrice;
   if (maxPrice !== undefined) params.maxPrice = maxPrice;
   if (roomType) params.roomType = roomType;
-  if (district !== undefined) params.district = district;
   if (maxCapacity) params.maxCapacity = maxCapacity;
+  if (districts) params.districts = districts;
+  if (amenities) params.amenities = amenities;
+  if (isFeatured !== undefined) params.isFeatured = isFeatured;
 
   const response = await axiosInstance.get(AppApis.rooms.get, {
     params,
   });
+  return response.data;
+};
+
+export const toggleWishlist = async (slug: string) => {
+  const response = await axiosInstance.post(AppApis.rooms.wishlist(slug));
   return response.data;
 };
 

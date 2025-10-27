@@ -82,7 +82,7 @@ export default function RoomGallery({ images = [] }: Props) {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 h-[400px] lg:h-[500px]">
         {/* Main Image */}
         <div
-          className="lg:col-span-3 relative group cursor-pointer"
+          className="lg:col-span-3 relative group cursor-pointer h-[400px] lg:h-[500px]"
           onClick={() => setShowLightbox(true)}
         >
           <Image
@@ -90,7 +90,7 @@ export default function RoomGallery({ images = [] }: Props) {
             width={1000}
             src={images[selectedImage]}
             alt="Room Main View"
-            className="w-full h-full object-cover rounded-2xl"
+            className="w-full h-[400px] lg:h-[500px] object-cover rounded-2xl"
             priority
             quality={100}
           />
