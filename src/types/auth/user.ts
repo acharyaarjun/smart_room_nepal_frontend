@@ -10,9 +10,13 @@ export type User = {
   loginMethod: string;
   role: string;
   userProfile: {
+    id: number;
     phone: string | null;
     gender: string | null;
     dob: string | null;
+    occupationStatus: string | null;
+    maritalStatus: string | null;
     avatar: Media | null;
+    document: Media | null;
   };
 };

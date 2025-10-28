@@ -1,7 +1,7 @@
 import { SidebarMenu } from "@/types/navbar/menu";
 import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { PiCardholderBold } from "react-icons/pi";
-// import { IoSettingsOutline } from "react-icons/io5";
+import { IoSettingsOutline } from "react-icons/io5";
 import { MdExplore, MdRateReview } from "react-icons/md";
 
 export const UserSidebarMenuData: SidebarMenu[] = [
@@ -29,10 +29,10 @@ export const UserSidebarMenuData: SidebarMenu[] = [
     link: "/rooms",
     icon: MdExplore,
   },
-  // {
-  //   id: 5,
-  //   title: "Settings",
-  //   link: "/dashboard/user/settings",
-  //   icon: IoSettingsOutline,
-  // },
+  {
+    id: 5,
+    title: "Settings",
+    link: "/dashboard/user/settings",
+    icon: IoSettingsOutline,
+  },
 ];

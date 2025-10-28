@@ -213,7 +213,7 @@ export default function UserReviews() {
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-gray-900 dark:text-white truncate">
+                        <h3 className="font-semibold text-gray-900 dark:text-white truncate text-wrap break-words line-clamp-1">
                           {review.roomRequest.room.name}
                         </h3>
                         <p className="text-sm text-gray-600 dark:text-gray-400">

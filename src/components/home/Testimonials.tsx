@@ -201,7 +201,7 @@ export default function Testimonials() {
               {/* Room Info */}
               <Link
                 href={`/rooms/${review.roomRequest.room.slug}`}
-                className="text-primary hover:text-primary/80 text-sm font-medium transition-colors"
+                className="text-primary hover:text-primary/80 text-sm font-medium transition-colors text-wrap break-words line-clamp-1"
               >
                 View {review.roomRequest.room.name} →
               </Link>

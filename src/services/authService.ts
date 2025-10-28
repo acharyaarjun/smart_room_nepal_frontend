@@ -12,11 +12,15 @@ export const updateProfile = async (data: any) => {
       formData.append(key, "");
     }
   }
-  const response = await axiosInstance.put(AppApis.users.me, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  const response = await axiosInstance.put(
+    AppApis.users.updateProfile,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
   return response.data;
 };
 

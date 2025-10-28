@@ -5,7 +5,7 @@ import {
   MdRateReview,
 } from "react-icons/md";
 import { PiCardholderBold } from "react-icons/pi";
-// import { IoSettingsOutline } from "react-icons/io5";
+import { IoSettingsOutline } from "react-icons/io5";
 import { RiVipCrownLine } from "react-icons/ri";
 
 export const HostSidebarMenuData: SidebarMenu[] = [
@@ -40,10 +40,10 @@ export const HostSidebarMenuData: SidebarMenu[] = [
     icon: RiVipCrownLine,
     badge: true, // Show badge when credits are low
   },
-  // {
-  //   id: 6,
-  //   title: "Settings",
-  //   link: "/dashboard/host/settings",
-  //   icon: IoSettingsOutline,
-  // },
+  {
+    id: 6,
+    title: "Settings",
+    link: "/dashboard/host/settings",
+    icon: IoSettingsOutline,
+  },
 ];

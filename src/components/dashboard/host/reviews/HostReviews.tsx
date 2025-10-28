@@ -235,7 +235,7 @@ export default function HostReviews() {
 
                   {/* Room Info */}
                   <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white text-wrap break-words line-clamp-1">
                       {review.roomRequest.room.name}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">

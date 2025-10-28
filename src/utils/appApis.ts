@@ -26,8 +26,8 @@ const AppApis = {
   },
   users: {
     me: `/api/${API_VERSION}/users/me`,
-    changePassword: `/api/${API_VERSION}/users/change-password`,
-    updateProfile: `/api/${API_VERSION}/users/profile`,
+    changePassword: `/api/${API_VERSION}/auth/change-password`,
+    updateProfile: `/api/${API_VERSION}/users/profile/me`,
   },
   districts: {
     all: `/api/${API_VERSION}/districts`,

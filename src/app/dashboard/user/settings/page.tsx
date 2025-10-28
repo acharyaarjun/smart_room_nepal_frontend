@@ -2,6 +2,8 @@ import { AppConsts } from "@/utils";
 import { Metadata } from "next";
 import React from "react";
 import AppUrl from "@/utils/appConsts";
+import ProfileSettings from "@/components/settings/ProfileSettings";
+import ChangePassword from "@/components/settings/ChangePassword";
 
 export const metadata: Metadata = {
   title: AppConsts.APP_NAME + " | Settings",
@@ -39,14 +41,17 @@ export default function UserSettingsPage() {
   return (
     <div className="space-y-6">
       <div className="bg-white dark:bg-dropdown rounded-lg shadow-custom p-6">
-        <h1 className="text-2xl font-bold text-primary mb-4">Settings</h1>
-        <p className="text-normal">
+        <h1 className="text-2xl font-bold text-primary mb-2">Settings</h1>
+        <p className="text-normal text-sm">
           Manage your account settings and preferences.
         </p>
-        <div className="mt-8 text-center py-12">
-          <p className="text-normal">Settings page coming soon</p>
-        </div>
       </div>
+
+      {/* Profile Settings */}
+      <ProfileSettings />
+
+      {/* Change Password */}
+      <ChangePassword />
     </div>
   );
 }
