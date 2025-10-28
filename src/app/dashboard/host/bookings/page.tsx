@@ -2,6 +2,7 @@ import { AppConsts } from "@/utils";
 import { Metadata } from "next";
 import React from "react";
 import AppUrl from "@/utils/appConsts";
+import { HostRequests } from "@/components/dashboard/host/requests";
 
 export const metadata: Metadata = {
   title: AppConsts.APP_NAME + " | Bookings",
@@ -36,15 +37,5 @@ export const metadata: Metadata = {
 };
 
 export default function HostBookingsPage() {
-  return (
-    <div className="space-y-6">
-      <div className="bg-white dark:bg-dropdown rounded-lg shadow-custom p-6">
-        <h1 className="text-2xl font-bold text-primary mb-4">Bookings</h1>
-        <p className="text-normal">View and manage bookings for your rooms.</p>
-        <div className="mt-8 text-center py-12">
-          <p className="text-normal">No bookings yet</p>
-        </div>
-      </div>
-    </div>
-  );
+  return <HostRequests />;
 }

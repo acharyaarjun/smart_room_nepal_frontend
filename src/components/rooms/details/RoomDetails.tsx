@@ -6,6 +6,7 @@ import {
   RoomDescription,
   RoomOwnerCard,
   RoomLocationMap,
+  RoomRequestModal,
 } from "@/components/rooms/details";
 import {
   FaHeart,
@@ -16,11 +17,14 @@ import {
   FaPhone,
   FaEnvelope,
   FaWhatsapp,
+  FaPaperPlane,
 } from "react-icons/fa";
 import { RoomDetails as RoomDetailsType } from "@/types/user/room";
 import { getProxiedImageUrl } from "@/utils";
 import { toggleWishlist } from "@/services/userService";
 import { toast } from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 interface RoomDetailsProps {
   room: RoomDetailsType;
@@ -29,6 +33,15 @@ interface RoomDetailsProps {
 export default function RoomDetails({ room }: RoomDetailsProps) {
   const [isWishlisted, setIsWishlisted] = useState<boolean>(room.isWishlisted);
   const [isTogglingWishlist, setIsTogglingWishlist] = useState(false);
+  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+
+  // Get user data from Redux store
+  const { isAuthenticated, user } = useSelector(
+    (state: RootState) => state.auth
+  );
+
+  const isUserRole = user?.role === "user";
+  const canRequestRoom = isAuthenticated && isUserRole && room.isAvailable;
 
   const handleWishlistToggle = async () => {
     if (isTogglingWishlist) return;
@@ -101,9 +114,9 @@ export default function RoomDetails({ room }: RoomDetailsProps) {
                   >
                     <FaHeart />
                   </button>
-                  <button className="p-2 rounded-full bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                  {/* <button className="p-2 rounded-full bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
                     <FaShare />
-                  </button>
+                  </button> */}
                 </div>
               </div>
 
@@ -183,6 +196,21 @@ export default function RoomDetails({ room }: RoomDetailsProps) {
               {/* Price Card */}
               <div className="bg-light dark:bg-dropdown rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
                 <div className="space-y-4">
+                  {/* Availability Badge */}
+                  {room.isAvailable ? (
+                    <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3">
+                      <span className="text-green-700 dark:text-green-300 font-semibold text-sm">
+                        ✓ Available
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
+                      <span className="text-red-700 dark:text-red-300 font-semibold text-sm">
+                        ✗ Not Available
+                      </span>
+                    </div>
+                  )}
+
                   <div className="flex items-baseline gap-2">
                     <span className="text-3xl font-bold text-gray-900 dark:text-white">
                       Rs. {(room.offerPrice || room.price).toLocaleString()}
@@ -204,12 +232,36 @@ export default function RoomDetails({ room }: RoomDetailsProps) {
                   )}
 
                   <div className="space-y-3">
-                    <button className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transition-colors duration-300">
-                      Contact Owner
+                    {/* Request Room Button */}
+                    <button
+                      onClick={() => setIsRequestModalOpen(true)}
+                      disabled={!canRequestRoom}
+                      className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      title={
+                        !isAuthenticated
+                          ? "Please login to request this room"
+                          : !isUserRole
+                          ? "Only users can request rooms"
+                          : !room.isAvailable
+                          ? "This room is not available"
+                          : "Request this room"
+                      }
+                    >
+                      <FaPaperPlane />
+                      {!isAuthenticated
+                        ? "Login to Request"
+                        : !isUserRole
+                        ? "Only Users Can Request"
+                        : !room.isAvailable
+                        ? "Room Not Available"
+                        : "Request Room"}
                     </button>
-                    <button className="w-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 font-semibold py-3 rounded-lg transition-colors duration-300">
-                      Schedule Visit
-                    </button>
+
+                    {isAuthenticated && !isUserRole && (
+                      <p className="text-xs text-center text-amber-600 dark:text-amber-400">
+                        Switch to user account to request rooms
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -291,6 +343,17 @@ export default function RoomDetails({ room }: RoomDetailsProps) {
           </div>
         </div>
       </div>
+
+      {/* Room Request Modal */}
+      <RoomRequestModal
+        isOpen={isRequestModalOpen}
+        onClose={() => setIsRequestModalOpen(false)}
+        roomSlug={room.slug}
+        roomUnit={room.unit}
+        roomName={room.name}
+        roomPrice={room.price}
+        offerPrice={room.offerPrice}
+      />
     </section>
   );
 }

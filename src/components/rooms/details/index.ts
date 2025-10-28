@@ -5,3 +5,4 @@ export { default as RoomAmenities } from "./RoomAmenities";
 export { default as RoomDescription } from "./RoomDescription";
 export { default as RoomOwnerCard } from "./RoomOwnerCard";
 export { default as RoomLocationMap } from "./RoomLocationMap";
+export { default as RoomRequestModal } from "./RoomRequestModal";

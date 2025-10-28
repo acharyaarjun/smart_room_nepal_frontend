@@ -44,6 +44,7 @@ export type RoomDetails = {
   createdAt: string;
   updatedAt: string;
   isWishlisted: boolean;
+  isAvailable: boolean;
   district: {
     id: number;
     name: string;

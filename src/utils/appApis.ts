@@ -70,6 +70,12 @@ const AppApis = {
       update: (amenityId: number) =>
         `/api/${API_VERSION}/rooms/amenities/${amenityId}`,
     },
+    requests: {
+      create: (slug: string) => `/api/${API_VERSION}/rooms/requests/${slug}`, // for user
+      getByUser: `/api/${API_VERSION}/rooms/requests`, // for user
+      getByHost: `/api/${API_VERSION}/rooms/requests/host`, // for host
+      update: (token: string) => `/api/${API_VERSION}/rooms/requests/${token}`, // for both host & user
+    },
   },
 };
 
