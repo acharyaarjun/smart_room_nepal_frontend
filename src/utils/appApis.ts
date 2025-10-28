@@ -88,6 +88,10 @@ const AppApis = {
         `/api/${API_VERSION}/rooms/reviews/${reviewId}`, // for user
     },
   },
+  dashboard: {
+    user: `/api/${API_VERSION}/dashboard/user`,
+    host: `/api/${API_VERSION}/dashboard/host`,
+  },
 };
 
 export default AppApis;

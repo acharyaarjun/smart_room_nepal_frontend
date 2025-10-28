@@ -52,7 +52,7 @@ export default function ClientLayout({ children, dashboardType }: Props) {
           initial={{ width: initialWidth }}
           animate={{ width: currentWidth }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="overflow-hidden hidden xl:block px-3"
+          className="overflow-hidden hidden xl:block px-3 py-2"
         >
           {children}
         </motion.div>
