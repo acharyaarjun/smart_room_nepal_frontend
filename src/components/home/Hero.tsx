@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import heroImage from "@/assets/images/home/hero.jpg";
 import heroIconOne from "@/assets/images/home/hero-icon-one.jpg";
 import heroIconTwo from "@/assets/images/home/hero-icon-two.jpg";
@@ -9,39 +9,71 @@ import { BiSupport } from "react-icons/bi";
 import { FaSearch } from "react-icons/fa";
 import { FaCirclePlay } from "react-icons/fa6";
 import { SelectElement } from "@/components/common/form-element";
+import { District } from "@/types/user/district";
+import { useRouter } from "next/navigation";
 
-export default function Hero() {
+interface HeroProps {
+  districts: District[];
+}
+
+export default function Hero({ districts }: HeroProps) {
+  const router = useRouter();
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [selectedRoomType, setSelectedRoomType] = useState<string | null>(null);
   const [selectedPersons, setSelectedPersons] = useState<string | null>(null);
 
-  const locationOptions = [
-    { value: "kathmandu", label: "Kathmandu" },
-    { value: "pokhara", label: "Pokhara" },
-    { value: "chitwan", label: "Chitwan" },
-    { value: "lalitpur", label: "Lalitpur" },
-    { value: "bhaktapur", label: "Bhaktapur" },
-  ];
+  const locationOptions = useMemo(() => {
+    return districts.map((district) => ({
+      value: district.slug,
+      label: district.name,
+    }));
+  }, [districts]);
 
   const roomTypeOptions = [
     { value: "single", label: "Single Room" },
     { value: "double", label: "Double Room" },
-    { value: "deluxe", label: "Deluxe Room" },
+    { value: "twin", label: "Twin Room" },
     { value: "suite", label: "Suite" },
+    { value: "deluxe", label: "Deluxe Room" },
+    { value: "family_room", label: "Family Room" },
+    { value: "studio", label: "Studio" },
+    { value: "penthouse", label: "Penthouse" },
     { value: "apartment", label: "Apartment" },
+    { value: "1_bhk", label: "1 BHK" },
+    { value: "2_bhk", label: "2 BHK" },
+    { value: "3_bhk", label: "3 BHK" },
+    { value: "4_bhk", label: "4 BHK" },
+    { value: "5_bhk", label: "5 BHK" },
+    { value: "shared_room", label: "Shared Room" },
+    { value: "hostel", label: "Hostel" },
+    { value: "paying_guest", label: "Paying Guest" },
+    { value: "dormitory", label: "Dormitory" },
+    { value: "homestay", label: "Homestay" },
+    { value: "lodge", label: "Lodge" },
+    { value: "cottage", label: "Cottage" },
+    { value: "villa", label: "Villa" },
   ];
 
   const personsOptions = [
-    { value: "1", label: "1 Person" },
-    { value: "2", label: "2 Persons" },
-    { value: "3", label: "3 Persons" },
-    { value: "4", label: "4 Persons" },
-    { value: "5+", label: "5+ Persons" },
+    { value: "1_person", label: "1 Person" },
+    { value: "2_persons", label: "2 Persons" },
+    { value: "3_persons", label: "3 Persons" },
+    { value: "4_persons", label: "4 Persons" },
+    { value: "5_persons", label: "5 Persons" },
+    { value: "5+_persons", label: "5+ Persons" },
   ];
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ selectedLocation, selectedRoomType, selectedPersons });
+
+    // Build query params
+    const params = new URLSearchParams();
+    if (selectedLocation) params.append("district", selectedLocation);
+    if (selectedRoomType) params.append("roomType", selectedRoomType);
+    if (selectedPersons) params.append("maxCapacity", selectedPersons);
+
+    // Navigate to rooms page with filters
+    router.push(`/rooms?${params.toString()}`);
   };
 
   return (
@@ -88,7 +120,7 @@ export default function Hero() {
                 Discover Now
               </Link>
 
-              <div className="flex items-center gap-3">
+              {/* <div className="flex items-center gap-3">
                 <div className="relative h-12 w-12 rounded-full overflow-hidden">
                   <Image
                     src={heroIconOne}
@@ -103,7 +135,7 @@ export default function Hero() {
                 <span className="text-base font-medium text-gray-600 dark:text-gray-300">
                   Watch our story
                 </span>
-              </div>
+              </div> */}
             </div>
           </div>
 

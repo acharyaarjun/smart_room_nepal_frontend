@@ -283,7 +283,7 @@ export default function HostDashboard() {
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
               Room Statistics
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3  gap-4">
               {roomStatsCards.map((stat, index) => (
                 <div
                   key={index}
@@ -308,7 +308,7 @@ export default function HostDashboard() {
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
               Booking Requests
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
               {requestStatsCards.map((stat, index) => (
                 <div
                   key={index}

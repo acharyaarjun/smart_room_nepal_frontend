@@ -85,7 +85,7 @@ export const deleteRoom = async (slug: string) => {
   return response.data;
 };
 
-// fethh in room details page show reviews
+// fetch in room details page show reviews
 export const getAllRoomReviews = async ({
   page = 1,
   size = 10,
@@ -102,6 +102,28 @@ export const getAllRoomReviews = async ({
   if (sort) params.sort = sort;
   if (order) params.order = order;
   if (room) params.room = room;
+
+  const response = await axiosInstance.get(AppApis.rooms.reviews.get, {
+    params,
+  });
+  return response.data;
+};
+
+// fetch all reviews without room filter - for testimonials/home page
+export const getAllReviews = async ({
+  page = 1,
+  size = 10,
+  search = "",
+  sort,
+  order,
+}: Params) => {
+  const params: Params = {
+    page: page,
+    size: size,
+  };
+  if (search) params.search = search;
+  if (sort) params.sort = sort;
+  if (order) params.order = order;
 
   const response = await axiosInstance.get(AppApis.rooms.reviews.get, {
     params,

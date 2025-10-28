@@ -1,13 +1,62 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import React from "react";
 import whyChooseUsImage from "@/assets/images/home/why-choose-us.jpg";
-import userImageOne from "@/assets/images/users/user-one.jpg";
-import userImageTwo from "@/assets/images/users/user-two.jpg";
-import userImageThree from "@/assets/images/users/user-three.jpg";
 import { FaStar } from "react-icons/fa";
 import { FaHome, FaShieldAlt, FaMapMarkerAlt, FaHeadset } from "react-icons/fa";
+import { getAllReviews } from "@/services/roomService";
+import { Review } from "@/types/user/room";
+import { getProxiedImageUrl } from "@/utils";
 
 export default function WhyChooseUs() {
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [totalReviews, setTotalReviews] = useState(0);
+  const [averageRating, setAverageRating] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchReviews();
+  }, []);
+
+  const fetchReviews = async () => {
+    try {
+      setLoading(true);
+      const response = await getAllReviews({
+        page: 1,
+        size: 3, // Get top 3 reviews for avatars
+        sort: "rating",
+        order: "DESC",
+      });
+
+      if (response.status === 200 && response.data) {
+        setReviews(response.data.data);
+        setTotalReviews(response.data.totalItems);
+
+        // Calculate average rating
+        if (response.data.data.length > 0) {
+          const avg =
+            response.data.data.reduce(
+              (sum: number, review: Review) => sum + review.rating,
+              0
+            ) / response.data.data.length;
+          setAverageRating(Math.round(avg * 10) / 10);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatCount = (count: number) => {
+    if (count >= 1000) {
+      return `${Math.floor(count / 1000)}K+`;
+    }
+    return `${count}+`;
+  };
+
   return (
     <section id="why-choose-us" className="w-full py-12">
       <div className="container">
@@ -40,51 +89,83 @@ export default function WhyChooseUs() {
 
               {/* Card overlay */}
               <div className="absolute bottom-23 left-6 w-[300px] bg-white dark:bg-dropdown z-20 rounded-lg overflow-hidden px-5 py-3 shadow-lg">
-                <div className="w-full flex justify-between font-medium text-sm">
-                  <span>Happy Tenants</span>
-                  <span>Rating</span>
-                </div>
-
-                <div className="w-full flex justify-between items-center mt-2">
-                  {/* Avatars */}
-                  <div className="w-full flex justify-start items-center">
-                    <div className="w-10 h-10 rounded-full flex justify-center items-center">
-                      <Image
-                        src={userImageOne}
-                        alt="Happy Tenant 1"
-                        height={200}
-                        width={200}
-                        className="h-full w-full rounded-full"
-                      />
+                {loading ? (
+                  // Loading skeleton
+                  <div className="animate-pulse">
+                    <div className="w-full flex justify-between font-medium text-sm mb-2">
+                      <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-24"></div>
+                      <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-16"></div>
                     </div>
-                    <div className="w-10 h-10 rounded-full flex justify-center items-center -ml-3">
-                      <Image
-                        src={userImageTwo}
-                        alt="Happy Tenant 2"
-                        height={200}
-                        width={200}
-                        className="h-full w-full rounded-full"
-                      />
-                    </div>
-                    <div className="w-10 h-10 rounded-full flex justify-center items-center -ml-3">
-                      <Image
-                        src={userImageThree}
-                        alt="Happy Tenant 3"
-                        height={200}
-                        width={200}
-                        className="h-full w-full rounded-full"
-                      />
-                    </div>
-                    <div className="w-10 h-10 rounded-full flex justify-center items-center bg-primary text-gray-200 font-semibold text-xs -ml-3">
-                      2K+
+                    <div className="w-full flex justify-between items-center mt-2">
+                      <div className="flex gap-2">
+                        <div className="w-10 h-10 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
+                        <div className="w-10 h-10 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
+                        <div className="w-10 h-10 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
+                      </div>
+                      <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded w-12"></div>
                     </div>
                   </div>
+                ) : (
+                  <>
+                    <div className="w-full flex justify-between font-medium text-sm">
+                      <span>Happy Clients</span>
+                      <span>Rating</span>
+                    </div>
 
-                  {/* Rating */}
-                  <div className="font-bold flex justify-center items-center gap-1">
-                    4.8 <FaStar className="text-yellow-400" />
-                  </div>
-                </div>
+                    <div className="w-full flex justify-between items-center mt-2">
+                      {/* Avatars */}
+                      <div className="w-full flex justify-start items-center">
+                        {reviews.length > 0 ? (
+                          <>
+                            {reviews.slice(0, 3).map((review, index) => (
+                              <div
+                                key={review.id}
+                                className="w-10 h-10 rounded-full flex justify-center items-center border-2 border-white dark:border-gray-800"
+                                style={{
+                                  marginLeft: index > 0 ? "-12px" : "0",
+                                }}
+                              >
+                                {review.roomRequest.user.userProfile.avatar ? (
+                                  <Image
+                                    src={getProxiedImageUrl(
+                                      review.roomRequest.user.userProfile.avatar
+                                        .path
+                                    )}
+                                    alt={review.roomRequest.user.fullName}
+                                    height={40}
+                                    width={40}
+                                    className="h-full w-full rounded-full object-cover"
+                                  />
+                                ) : (
+                                  <div className="h-full w-full rounded-full bg-primary flex items-center justify-center text-white font-semibold text-sm">
+                                    {review.roomRequest.user.fullName
+                                      .charAt(0)
+                                      .toUpperCase()}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                            {totalReviews > 3 && (
+                              <div className="w-10 h-10 rounded-full flex justify-center items-center bg-primary text-gray-200 font-semibold text-xs -ml-3 border-2 border-white dark:border-gray-800">
+                                {formatCount(totalReviews)}
+                              </div>
+                            )}
+                          </>
+                        ) : (
+                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                            No reviews yet
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Rating */}
+                      <div className="font-bold flex justify-center items-center gap-1">
+                        {averageRating > 0 ? averageRating : "N/A"}{" "}
+                        <FaStar className="text-yellow-400" />
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>

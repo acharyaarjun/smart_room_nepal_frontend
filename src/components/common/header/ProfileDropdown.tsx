@@ -7,6 +7,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useLogin } from "@/hooks";
 import Image from "next/image";
+import { HostSidebarMenuData } from "@/data/hostSidebar";
+import { UserSidebarMenuData } from "@/data/userSidebar";
+import { SidebarMenu } from "@/types/navbar/menu";
 
 const ProfileDropdownComponent = () => {
   const dropdownText = "text-normal";
@@ -14,15 +17,21 @@ const ProfileDropdownComponent = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { isLoading, handleLogout } = useLogin();
 
-  // Determine dashboard URL based on user role
-  const dashboardUrl =
-    user?.role === "host" ? "/dashboard/host" : "/dashboard/user";
+  // Select the appropriate sidebar menu based on user role
+  let menuData: SidebarMenu[] = [];
+  if (user?.role === "host") {
+    menuData = HostSidebarMenuData;
+  } else if (user?.role === "user") {
+    menuData = UserSidebarMenuData;
+  }
 
-  // Determine settings URL based on user role
-  const settingsUrl =
-    user?.role === "host"
-      ? "/dashboard/host/settings"
-      : "/dashboard/user/settings";
+  // Filter menu items based on user role
+  const filteredMenuData = menuData.filter((menu) => {
+    if (!menu.roles || menu.roles.length === 0) {
+      return true; // No role restriction
+    }
+    return user?.role && menu.roles.includes(user.role);
+  });
 
   return (
     <Dropdown
@@ -51,22 +60,17 @@ const ProfileDropdownComponent = () => {
       <ul className={`flex flex-col text-base min-w-[200px] ${dropdownText}`}>
         {user ? (
           <>
-            <li>
-              <Link
-                href={dashboardUrl}
-                className="block w-full px-4 py-2 hover:bg-primary/10 font-medium rounded-md"
-              >
-                Dashboard
-              </Link>
-            </li>
-            <li>
-              <Link
-                href={settingsUrl}
-                className="block w-full px-4 py-2 hover:bg-primary/10 font-medium rounded-md"
-              >
-                Settings
-              </Link>
-            </li>
+            {filteredMenuData.map((menu: SidebarMenu) => (
+              <li key={menu.id}>
+                <Link
+                  href={menu.link}
+                  className="flex items-center gap-3 w-full px-4 py-2 hover:bg-primary/10 font-medium rounded-md"
+                >
+                  <menu.icon className="text-lg" />
+                  <span>{menu.title}</span>
+                </Link>
+              </li>
+            ))}
             <li>
               <div
                 onClick={isLoading ? undefined : handleLogout}

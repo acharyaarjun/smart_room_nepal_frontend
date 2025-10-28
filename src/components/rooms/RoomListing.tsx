@@ -14,6 +14,7 @@ import { District } from "@/types/user/district";
 import { Amenity } from "@/types/user/amenity";
 import { IconComponent } from "@/components/common";
 import { getAllRooms } from "@/services/userService";
+import { useSearchParams } from "next/navigation";
 
 interface RoomListingProps {
   districts: District[];
@@ -24,6 +25,7 @@ export default function RoomListing({
   districts,
   amenities,
 }: RoomListingProps) {
+  const searchParams = useSearchParams();
   const [isLongView, setIsLongView] = useState<boolean>(false);
   const [showFilters, setShowFilters] = useState<boolean>(false);
   const [filters, setFilters] = useState<Filters>({
@@ -41,7 +43,29 @@ export default function RoomListing({
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [totalItems, setTotalItems] = useState<number>(0);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
   const itemsPerPage = 6;
+
+  // Initialize filters from URL params
+  useEffect(() => {
+    const district = searchParams.get("district");
+    const roomType = searchParams.get("roomType");
+    const maxCapacity = searchParams.get("maxCapacity");
+
+    if (district || roomType || maxCapacity) {
+      // Show filters if coming from search
+      setShowFilters(true);
+
+      setFilters((prev) => ({
+        ...prev,
+        locations: district ? [district] : prev.locations,
+        roomType: roomType || prev.roomType,
+        maxCapacity: maxCapacity || prev.maxCapacity,
+      }));
+    }
+
+    setIsInitialized(true);
+  }, [searchParams]);
 
   // Transform amenities to include icons
   const availableAmenities = useMemo(() => {
@@ -66,8 +90,10 @@ export default function RoomListing({
     });
   };
 
-  // Fetch rooms whenever filters or page changes
+  // Fetch rooms whenever filters or page changes (only after initialization)
   useEffect(() => {
+    if (!isInitialized) return;
+
     const fetchRooms = async () => {
       setLoading(true);
       try {
@@ -103,7 +129,7 @@ export default function RoomListing({
     };
 
     fetchRooms();
-  }, [filters, currentPage]);
+  }, [filters, currentPage, isInitialized]);
 
   return (
     <section id="room-listing" className="w-full py-12">

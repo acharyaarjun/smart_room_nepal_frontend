@@ -43,12 +43,12 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
     }));
   };
 
-  const handleLocationChange = (locationName: string) => {
+  const handleLocationChange = (locationSlug: string) => {
     setTempFilters((prev) => ({
       ...prev,
-      locations: prev.locations.includes(locationName)
-        ? prev.locations.filter((loc) => loc !== locationName)
-        : [...prev.locations, locationName],
+      locations: prev.locations.includes(locationSlug)
+        ? prev.locations.filter((loc) => loc !== locationSlug)
+        : [...prev.locations, locationSlug],
     }));
   };
 
@@ -169,8 +169,8 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
             >
               <input
                 type="checkbox"
-                checked={tempFilters.locations.includes(district.name)}
-                onChange={() => handleLocationChange(district.name)}
+                checked={tempFilters.locations.includes(district.slug)}
+                onChange={() => handleLocationChange(district.slug)}
                 className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
               />
               <span className=" text-normal">{district.name}</span>

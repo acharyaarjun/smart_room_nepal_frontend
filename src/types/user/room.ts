@@ -88,6 +88,7 @@ export type Review = {
   message: string;
   createdAt: string;
   updatedAt: string;
+  media: Media | null;
   roomRequest: {
     id: number; // dont show in client
     token: string; // dont show in client

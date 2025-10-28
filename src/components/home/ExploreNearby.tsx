@@ -30,7 +30,10 @@ export default function ExploreNearby({ districts }: ExploreNearbyProps) {
                 height={300}
               />
               <div className="text-center py-2">
-                <Link href={"#"} className="font-medium text-lg">
+                <Link
+                  href={`/rooms?district=${district.slug}`}
+                  className="font-medium text-lg"
+                >
                   {district.name}
                 </Link>
                 <p className="text-sm text-gray-500">{district.description}</p>

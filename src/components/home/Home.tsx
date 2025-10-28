@@ -7,6 +7,7 @@ import {
   BookingProcess,
   WhyChooseUs,
   RecentlyViewed,
+  Testimonials,
 } from "@/components/home";
 import { District } from "@/types/user/district";
 
@@ -17,11 +18,12 @@ interface HomeProps {
 export default function Home({ districts }: HomeProps) {
   return (
     <>
-      <Hero />
+      <Hero districts={districts} />
       <WhyChooseUs />
       <ExploreNearby districts={districts} />
       <FeaturedRooms />
       <BookingProcess />
+      <Testimonials />
       <RecentlyViewed />
     </>
   );
