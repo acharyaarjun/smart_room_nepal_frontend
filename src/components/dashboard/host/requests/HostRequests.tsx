@@ -4,10 +4,10 @@ import {
   FaEye,
   FaCheck,
   FaTimes,
-  FaSearch,
   FaFilter,
   FaCalendarAlt,
   FaHome,
+  FaComments,
 } from "react-icons/fa";
 import {
   getAllRoomRequestForHost,
@@ -19,13 +19,16 @@ import { toast } from "react-hot-toast";
 import { Pagination, Spinner, ConfirmDialog } from "@/components/common";
 import { getProxiedImageUrl } from "@/utils";
 import Image from "next/image";
+import RoomRequestChat from "@/components/common/RoomRequestChat";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 export default function HostRequests() {
   const [requests, setRequests] = useState<RoomRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   // roomFilter can be used to filter by room slug from URL params in the future
   const [roomFilter, setRoomFilter] = useState(""); // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -38,6 +41,11 @@ export default function HostRequests() {
   const [requestToProcess, setRequestToProcess] = useState<string | null>(null);
   const [acceptedPrice, setAcceptedPrice] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [selectedChatRequest, setSelectedChatRequest] =
+    useState<RoomRequest | null>(null);
+
+  const { user } = useSelector((state: RootState) => state.auth);
 
   const fetchRequests = async () => {
     setLoading(true);
@@ -147,6 +155,16 @@ export default function HostRequests() {
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const handleOpenChat = (request: RoomRequest) => {
+    setSelectedChatRequest(request);
+    setIsChatOpen(true);
+  };
+
+  const handleCloseChat = () => {
+    setIsChatOpen(false);
+    setSelectedChatRequest(null);
   };
 
   const getStatusBadge = (status: string) => {
@@ -304,7 +322,7 @@ export default function HostRequests() {
                         {formatDate(request.createdAt)}
                       </td>
                       <td className="px-4 py-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
+                        <div className="flex items-center justify-end flex-wrap gap-2">
                           <button
                             onClick={() => handleViewDetails(request)}
                             className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
@@ -312,6 +330,18 @@ export default function HostRequests() {
                           >
                             <FaEye />
                           </button>
+                          {/* Show chat for approved, ongoing, and completed requests */}
+                          {request.status !== RoomRequestStatus.CANCELED &&
+                            request.status !== RoomRequestStatus.COMPLETED &&
+                            request.status !== RoomRequestStatus.REJECTED && (
+                              <button
+                                onClick={() => handleOpenChat(request)}
+                                className="p-2 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg transition-colors"
+                                title="Chat with Guest"
+                              >
+                                <FaComments />
+                              </button>
+                            )}
                           {request.status === RoomRequestStatus.PENDING && (
                             <>
                               <button
@@ -741,6 +771,18 @@ export default function HostRequests() {
         cancelText="Cancel"
         loading={isProcessing}
       />
+
+      {/* Chat Modal */}
+      {isChatOpen && selectedChatRequest && user && (
+        <RoomRequestChat
+          roomRequestId={selectedChatRequest.id}
+          currentUserId={user.id}
+          isHost={true}
+          otherUserName={selectedChatRequest.user.fullName}
+          roomName={selectedChatRequest.room.name}
+          onClose={handleCloseChat}
+        />
+      )}
     </div>
   );
 }

@@ -7,6 +7,7 @@ import {
   FaCalendarAlt,
   FaHome,
   FaStar,
+  FaComments,
 } from "react-icons/fa";
 import {
   getAllRoomRequestForUser,
@@ -21,6 +22,9 @@ import { Pagination, Spinner, ConfirmDialog } from "@/components/common";
 import { getProxiedImageUrl } from "@/utils";
 import Image from "next/image";
 import { ReviewModal } from "@/components/dashboard/user/reviews";
+import RoomRequestChat from "@/components/common/RoomRequestChat";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 export default function UserRequests() {
   const [requests, setRequests] = useState<RoomRequest[]>([]);
@@ -40,6 +44,11 @@ export default function UserRequests() {
     null
   );
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [selectedChatRequest, setSelectedChatRequest] =
+    useState<RoomRequest | null>(null);
+
+  const { user } = useSelector((state: RootState) => state.auth);
 
   const fetchRequests = async () => {
     setLoading(true);
@@ -105,6 +114,16 @@ export default function UserRequests() {
   const handleAddReview = (request: RoomRequest) => {
     setRequestForReview(request);
     setIsReviewModalOpen(true);
+  };
+
+  const handleOpenChat = (request: RoomRequest) => {
+    setSelectedChatRequest(request);
+    setIsChatOpen(true);
+  };
+
+  const handleCloseChat = () => {
+    setIsChatOpen(false);
+    setSelectedChatRequest(null);
   };
 
   const handleSubmitReview = async (data: ReviewForm) => {
@@ -293,6 +312,18 @@ export default function UserRequests() {
                           >
                             <FaEye />
                           </button>
+                          {/* Show chat for approved, ongoing, and completed requests */}
+                          {request.status !== RoomRequestStatus.CANCELED &&
+                            request.status !== RoomRequestStatus.COMPLETED &&
+                            request.status !== RoomRequestStatus.REJECTED && (
+                              <button
+                                onClick={() => handleOpenChat(request)}
+                                className="p-2 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg transition-colors"
+                                title="Chat with Host"
+                              >
+                                <FaComments />
+                              </button>
+                            )}
                           {request.status === RoomRequestStatus.PENDING && (
                             <button
                               onClick={() => handleCancelRequest(request.token)}
@@ -654,6 +685,18 @@ export default function UserRequests() {
           roomName={requestForReview.room.name}
           isEdit={false}
           loading={isSubmittingReview}
+        />
+      )}
+
+      {/* Chat Modal */}
+      {isChatOpen && selectedChatRequest && user && (
+        <RoomRequestChat
+          roomRequestId={selectedChatRequest.id}
+          currentUserId={user.id}
+          isHost={false}
+          otherUserName={selectedChatRequest.room.user.fullName}
+          roomName={selectedChatRequest.room.name}
+          onClose={handleCloseChat}
         />
       )}
     </div>

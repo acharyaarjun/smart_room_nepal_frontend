@@ -75,6 +75,13 @@ const AppApis = {
       getByUser: `/api/${API_VERSION}/rooms/requests`, // for user
       getByHost: `/api/${API_VERSION}/rooms/requests/host`, // for host
       update: (token: string) => `/api/${API_VERSION}/rooms/requests/${token}`, // for both host & user
+      conversations: {
+        get: (roomRequestId: number) =>
+          `/api/${API_VERSION}/rooms/requests/${roomRequestId}/conversations`,
+        unreadCount: (roomRequestId: number) =>
+          `/api/${API_VERSION}/rooms/requests/${roomRequestId}/conversations/unread-count`,
+        unreadSummary: `/api/${API_VERSION}/rooms/requests/conversations/summary`,
+      },
     },
     reviews: {
       create: (roomRequestId: number) =>
