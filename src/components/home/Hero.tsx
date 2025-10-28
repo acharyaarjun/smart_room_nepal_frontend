@@ -7,7 +7,6 @@ import heroIconTwo from "@/assets/images/home/hero-icon-two.jpg";
 import Image from "next/image";
 import { BiSupport } from "react-icons/bi";
 import { FaSearch } from "react-icons/fa";
-import { FaCirclePlay } from "react-icons/fa6";
 import { SelectElement } from "@/components/common/form-element";
 import { District } from "@/types/user/district";
 import { useRouter } from "next/navigation";
