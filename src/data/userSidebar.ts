@@ -1,8 +1,8 @@
 import { SidebarMenu } from "@/types/navbar/menu";
 import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { PiCardholderBold } from "react-icons/pi";
-import { IoSettingsOutline } from "react-icons/io5";
-import { MdExplore } from "react-icons/md";
+// import { IoSettingsOutline } from "react-icons/io5";
+import { MdExplore, MdRateReview } from "react-icons/md";
 
 export const UserSidebarMenuData: SidebarMenu[] = [
   {
@@ -19,14 +19,20 @@ export const UserSidebarMenuData: SidebarMenu[] = [
   },
   {
     id: 3,
+    title: "My Reviews",
+    link: "/dashboard/user/reviews",
+    icon: MdRateReview,
+  },
+  {
+    id: 4,
     title: "Explore Rooms",
     link: "/rooms",
     icon: MdExplore,
   },
-  {
-    id: 4,
-    title: "Settings",
-    link: "/dashboard/user/settings",
-    icon: IoSettingsOutline,
-  },
+  // {
+  //   id: 5,
+  //   title: "Settings",
+  //   link: "/dashboard/user/settings",
+  //   icon: IoSettingsOutline,
+  // },
 ];

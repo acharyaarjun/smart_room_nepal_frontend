@@ -80,3 +80,31 @@ export type RoomDetails = {
     };
   };
 };
+
+// in room details page show reviews
+export type Review = {
+  id: number;
+  rating: number;
+  message: string;
+  createdAt: string;
+  updatedAt: string;
+  roomRequest: {
+    id: number; // dont show in client
+    token: string; // dont show in client
+    status: string; // dont show in client
+    user: {
+      id: number;
+      username: string;
+      fullName: string;
+      userProfile: {
+        id: number;
+        avatar: Media | null;
+      };
+    };
+    room: {
+      id: number;
+      name: string;
+      slug: string;
+    };
+  };
+};

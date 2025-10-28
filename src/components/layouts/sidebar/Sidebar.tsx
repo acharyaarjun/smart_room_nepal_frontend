@@ -131,7 +131,7 @@ export default function Sidebar({ dashboardType }: SidebarProps) {
       </div>
 
       {/* Desktop Sidebar */}
-      <div className="hidden sticky top-[150px] lg:block min-h-[calc(100dvh-200px)] max-h-[680px]">
+      <div className="hidden sticky top-[150px] lg:block min-h-[calc(100dvh-200px)] max-h-[780px]">
         {/* Toggle Button */}
         <div className="absolute top-6 right-[-14px] w-7 h-7 flex justify-center items-center z-10">
           <div

@@ -76,6 +76,17 @@ const AppApis = {
       getByHost: `/api/${API_VERSION}/rooms/requests/host`, // for host
       update: (token: string) => `/api/${API_VERSION}/rooms/requests/${token}`, // for both host & user
     },
+    reviews: {
+      create: (roomRequestId: number) =>
+        `/api/${API_VERSION}/rooms/reviews/${roomRequestId}`, // for user
+      getByUser: `/api/${API_VERSION}/rooms/reviews/user`, // for user
+      getByHost: `/api/${API_VERSION}/rooms/reviews/host`, // for host
+      get: `/api/${API_VERSION}/rooms/reviews`, // for client
+      update: (reviewId: number) =>
+        `/api/${API_VERSION}/rooms/reviews/${reviewId}`, // for user
+      delete: (reviewId: number) =>
+        `/api/${API_VERSION}/rooms/reviews/${reviewId}`, // for user
+    },
   },
 };
 

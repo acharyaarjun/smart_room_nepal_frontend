@@ -3,28 +3,30 @@ import React, { useState, useEffect } from "react";
 import {
   FaEye,
   FaTimes,
-  FaSearch,
   FaFilter,
   FaCalendarAlt,
   FaHome,
+  FaStar,
 } from "react-icons/fa";
 import {
   getAllRoomRequestForUser,
   cancelRoomRequest,
 } from "@/services/requestService";
+import { createRoomReview } from "@/services/reviewService";
 import { RoomRequest } from "@/types/user/request";
+import { ReviewForm } from "@/types/user/review";
 import { RoomRequestStatus } from "@/enums";
 import { toast } from "react-hot-toast";
 import { Pagination, Spinner, ConfirmDialog } from "@/components/common";
 import { getProxiedImageUrl } from "@/utils";
 import Image from "next/image";
+import { ReviewModal } from "@/components/dashboard/user/reviews";
 
 export default function UserRequests() {
   const [requests, setRequests] = useState<RoomRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [selectedRequest, setSelectedRequest] = useState<RoomRequest | null>(
     null
@@ -33,6 +35,11 @@ export default function UserRequests() {
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
   const [requestToCancel, setRequestToCancel] = useState<string | null>(null);
   const [isCancelling, setIsCancelling] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [requestForReview, setRequestForReview] = useState<RoomRequest | null>(
+    null
+  );
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
 
   const fetchRequests = async () => {
     setLoading(true);
@@ -40,7 +47,6 @@ export default function UserRequests() {
       const response = await getAllRoomRequestForUser({
         page: currentPage,
         size: 10,
-        search: searchTerm,
         roomRequestStatus: statusFilter,
         sort: "createdAt",
         order: "desc",
@@ -61,7 +67,7 @@ export default function UserRequests() {
   useEffect(() => {
     fetchRequests();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, searchTerm, statusFilter]);
+  }, [currentPage, statusFilter]);
 
   const handleViewDetails = (request: RoomRequest) => {
     setSelectedRequest(request);
@@ -93,6 +99,34 @@ export default function UserRequests() {
       console.error("Error cancelling request:", error);
     } finally {
       setIsCancelling(false);
+    }
+  };
+
+  const handleAddReview = (request: RoomRequest) => {
+    setRequestForReview(request);
+    setIsReviewModalOpen(true);
+  };
+
+  const handleSubmitReview = async (data: ReviewForm) => {
+    if (!requestForReview) return;
+
+    setIsSubmittingReview(true);
+    try {
+      const response = await createRoomReview(data, requestForReview.id);
+
+      if (response.status === 201) {
+        toast.success("Review submitted successfully");
+        setIsReviewModalOpen(false);
+        setRequestForReview(null);
+        fetchRequests();
+      }
+    } catch (error: any) {
+      const errorMessage =
+        error?.response?.data?.message || "Failed to submit review";
+      toast.error(errorMessage);
+      console.error("Error submitting review:", error);
+    } finally {
+      setIsSubmittingReview(false);
     }
   };
 
@@ -268,6 +302,16 @@ export default function UserRequests() {
                               <FaTimes />
                             </button>
                           )}
+                          {request.status === RoomRequestStatus.COMPLETED &&
+                            !request.hasReview && (
+                              <button
+                                onClick={() => handleAddReview(request)}
+                                className="p-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors"
+                                title="Add Review"
+                              >
+                                <FaStar />
+                              </button>
+                            )}
                         </div>
                       </td>
                     </tr>
@@ -341,6 +385,15 @@ export default function UserRequests() {
                         <FaTimes /> Cancel
                       </button>
                     )}
+                    {request.status === RoomRequestStatus.COMPLETED &&
+                      !request.hasReview && (
+                        <button
+                          onClick={() => handleAddReview(request)}
+                          className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                        >
+                          <FaStar /> Review
+                        </button>
+                      )}
                   </div>
                 </div>
               ))}
@@ -588,6 +641,21 @@ export default function UserRequests() {
         cancelText="No, Keep It"
         loading={isCancelling}
       />
+
+      {/* Review Modal */}
+      {isReviewModalOpen && requestForReview && (
+        <ReviewModal
+          isOpen={isReviewModalOpen}
+          onClose={() => {
+            setIsReviewModalOpen(false);
+            setRequestForReview(null);
+          }}
+          onSubmit={handleSubmitReview}
+          roomName={requestForReview.room.name}
+          isEdit={false}
+          loading={isSubmittingReview}
+        />
+      )}
     </div>
   );
 }

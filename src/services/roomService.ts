@@ -14,6 +14,7 @@ interface Params {
   roomType?: string;
   district?: number;
   maxCapacity?: string;
+  room?: string;
 }
 
 export const getDistricts = async () => {
@@ -81,5 +82,29 @@ export const updateRoom = async (data: ItemForm, slug: string) => {
 
 export const deleteRoom = async (slug: string) => {
   const response = await axiosInstance.delete(AppApis.rooms.delete(slug));
+  return response.data;
+};
+
+// fethh in room details page show reviews
+export const getAllRoomReviews = async ({
+  page = 1,
+  size = 10,
+  search = "",
+  sort,
+  order,
+  room,
+}: Params) => {
+  const params: Params = {
+    page: page,
+    size: size,
+  };
+  if (search) params.search = search;
+  if (sort) params.sort = sort;
+  if (order) params.order = order;
+  if (room) params.room = room;
+
+  const response = await axiosInstance.get(AppApis.rooms.reviews.get, {
+    params,
+  });
   return response.data;
 };

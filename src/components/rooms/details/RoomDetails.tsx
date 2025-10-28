@@ -7,10 +7,10 @@ import {
   RoomOwnerCard,
   RoomLocationMap,
   RoomRequestModal,
+  RoomReviews,
 } from "@/components/rooms/details";
 import {
   FaHeart,
-  FaShare,
   FaMapMarkerAlt,
   FaBed,
   FaRulerCombined,
@@ -187,6 +187,11 @@ export default function RoomDetails({ room }: RoomDetailsProps) {
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Reviews Section */}
+            <div className="space-y-4">
+              <RoomReviews roomSlug={room.slug} />
             </div>
           </div>
 

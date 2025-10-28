@@ -19,6 +19,7 @@ export type RoomRequest = {
   status: string; // @/enums/roomRequestStatus.ts
   createdAt: string;
   updatedAt: string;
+  hasReview?: boolean;
   room: {
     id: number;
     name: string;

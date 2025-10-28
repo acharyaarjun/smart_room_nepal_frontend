@@ -83,7 +83,7 @@ export default function RoomList() {
       </div>
 
       {/* Search Bar */}
-      <div className="mb-6">
+      {/* <div className="mb-6">
         <div className="relative">
           <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
           <input
@@ -94,7 +94,7 @@ export default function RoomList() {
             className="w-full pl-10 pr-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-transparent focus:outline-none focus:border-primary"
           />
         </div>
-      </div>
+      </div> */}
 
       {/* Room List */}
       {loading ? (
