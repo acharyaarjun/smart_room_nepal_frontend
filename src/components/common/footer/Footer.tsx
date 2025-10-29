@@ -16,10 +16,8 @@ export default function Footer() {
 
   return (
     <footer className="bg-black text-white">
-      {/* Main Footer Content */}
       <div className="container py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Column 1: Logo and Details */}
           <div className="space-y-4">
             <Image
               src="/long-logo.png"
@@ -35,7 +33,6 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Column 2: Page Links */}
           <div>
             <h3 className="text-xl font-bold mb-6 text-white">Pages</h3>
             <ul className="space-y-3">
