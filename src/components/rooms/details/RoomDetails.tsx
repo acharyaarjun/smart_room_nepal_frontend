@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   RoomGallery,
   RoomAmenities,
@@ -21,17 +21,21 @@ import {
 } from "react-icons/fa";
 import { RoomDetails as RoomDetailsType } from "@/types/user/room";
 import { getProxiedImageUrl } from "@/utils";
-import { toggleWishlist } from "@/services/userService";
+import { getSingleRoom, toggleWishlist } from "@/services/userService";
 import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { Spinner } from "@/components/common";
 
 interface RoomDetailsProps {
-  room: RoomDetailsType;
+  slug: string;
 }
 
-export default function RoomDetails({ room }: RoomDetailsProps) {
-  const [isWishlisted, setIsWishlisted] = useState<boolean>(room.isWishlisted);
+export default function RoomDetails({ slug }: RoomDetailsProps) {
+  const [room, setRoom] = useState<RoomDetailsType | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isWishlisted, setIsWishlisted] = useState<boolean>(false);
   const [isTogglingWishlist, setIsTogglingWishlist] = useState(false);
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
 
@@ -41,10 +45,34 @@ export default function RoomDetails({ room }: RoomDetailsProps) {
   );
 
   const isUserRole = user?.role === "user";
-  const canRequestRoom = isAuthenticated && isUserRole && room.isAvailable;
+  const canRequestRoom = isAuthenticated && isUserRole && room?.isAvailable;
+
+  // Fetch room details on component mount
+  useEffect(() => {
+    const fetchRoomDetails = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await getSingleRoom(slug);
+        if (response.status === 200 && response.data) {
+          setRoom(response.data);
+          setIsWishlisted(response.data.isWishlisted);
+        } else {
+          setError("Room not found");
+        }
+      } catch (err: any) {
+        console.error("Error fetching room details:", err);
+        setError(err?.response?.data?.message || "Failed to load room details");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRoomDetails();
+  }, [slug]);
 
   const handleWishlistToggle = async () => {
-    if (isTogglingWishlist) return;
+    if (isTogglingWishlist || !room) return;
 
     const previousState = isWishlisted;
     setIsTogglingWishlist(true);
@@ -68,6 +96,34 @@ export default function RoomDetails({ room }: RoomDetailsProps) {
       setIsTogglingWishlist(false);
     }
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <section className="w-full py-8 lg:py-12">
+        <div className="container">
+          <div className="flex justify-center items-center min-h-[400px]">
+            <Spinner />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Error state
+  if (error || !room) {
+    return (
+      <section className="w-full py-8 lg:py-12">
+        <div className="container">
+          <div className="text-center py-12">
+            <p className="text-xl text-red-600 dark:text-red-400">
+              {error || "Room not found"}
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   // Prepare images for gallery
   const galleryImages = [

@@ -8,6 +8,8 @@ import {
   FaCalendarAlt,
   FaHome,
   FaComments,
+  FaPlay,
+  FaCheckCircle,
 } from "react-icons/fa";
 import {
   getAllRoomRequestForHost,
@@ -38,6 +40,8 @@ export default function HostRequests() {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
+  const [isOngoingDialogOpen, setIsOngoingDialogOpen] = useState(false);
+  const [isCompleteDialogOpen, setIsCompleteDialogOpen] = useState(false);
   const [requestToProcess, setRequestToProcess] = useState<string | null>(null);
   const [acceptedPrice, setAcceptedPrice] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -91,6 +95,16 @@ export default function HostRequests() {
   const handleRejectRequest = (token: string) => {
     setRequestToProcess(token);
     setIsRejectDialogOpen(true);
+  };
+
+  const handleMarkAsOngoing = (token: string) => {
+    setRequestToProcess(token);
+    setIsOngoingDialogOpen(true);
+  };
+
+  const handleMarkAsCompleted = (token: string) => {
+    setRequestToProcess(token);
+    setIsCompleteDialogOpen(true);
   };
 
   const confirmApproveRequest = async () => {
@@ -152,6 +166,62 @@ export default function HostRequests() {
         error?.response?.data?.message || "Failed to reject request";
       toast.error(errorMessage);
       console.error("Error rejecting request:", error);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const confirmMarkAsOngoing = async () => {
+    if (!requestToProcess) return;
+
+    setIsProcessing(true);
+    try {
+      const response = await updateRoomRequest(
+        {
+          status: RoomRequestStatus.ON_GOING,
+        },
+        requestToProcess
+      );
+
+      if (response.status === 200) {
+        toast.success("Request marked as ongoing");
+        setIsOngoingDialogOpen(false);
+        setRequestToProcess(null);
+        fetchRequests();
+      }
+    } catch (error: any) {
+      const errorMessage =
+        error?.response?.data?.message || "Failed to update request status";
+      toast.error(errorMessage);
+      console.error("Error updating request:", error);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const confirmMarkAsCompleted = async () => {
+    if (!requestToProcess) return;
+
+    setIsProcessing(true);
+    try {
+      const response = await updateRoomRequest(
+        {
+          status: RoomRequestStatus.COMPLETED,
+        },
+        requestToProcess
+      );
+
+      if (response.status === 200) {
+        toast.success("Request marked as completed");
+        setIsCompleteDialogOpen(false);
+        setRequestToProcess(null);
+        fetchRequests();
+      }
+    } catch (error: any) {
+      const errorMessage =
+        error?.response?.data?.message || "Failed to update request status";
+      toast.error(errorMessage);
+      console.error("Error updating request:", error);
     } finally {
       setIsProcessing(false);
     }
@@ -367,6 +437,26 @@ export default function HostRequests() {
                               </button>
                             </>
                           )}
+                          {request.status === RoomRequestStatus.APPROVED && (
+                            <button
+                              onClick={() => handleMarkAsOngoing(request.token)}
+                              className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                              title="Mark as Ongoing"
+                            >
+                              <FaPlay />
+                            </button>
+                          )}
+                          {request.status === RoomRequestStatus.ON_GOING && (
+                            <button
+                              onClick={() =>
+                                handleMarkAsCompleted(request.token)
+                              }
+                              className="p-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors"
+                              title="Mark as Completed"
+                            >
+                              <FaCheckCircle />
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -449,6 +539,22 @@ export default function HostRequests() {
                           <FaTimes /> Reject
                         </button>
                       </>
+                    )}
+                    {request.status === RoomRequestStatus.APPROVED && (
+                      <button
+                        onClick={() => handleMarkAsOngoing(request.token)}
+                        className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                      >
+                        <FaPlay /> Start
+                      </button>
+                    )}
+                    {request.status === RoomRequestStatus.ON_GOING && (
+                      <button
+                        onClick={() => handleMarkAsCompleted(request.token)}
+                        className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                      >
+                        <FaCheckCircle /> Complete
+                      </button>
                     )}
                   </div>
                 </div>
@@ -678,6 +784,28 @@ export default function HostRequests() {
                     </button>
                   </>
                 )}
+                {selectedRequest.status === RoomRequestStatus.APPROVED && (
+                  <button
+                    onClick={() => {
+                      setIsViewModalOpen(false);
+                      handleMarkAsOngoing(selectedRequest.token);
+                    }}
+                    className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
+                  >
+                    <FaPlay /> Mark as Ongoing
+                  </button>
+                )}
+                {selectedRequest.status === RoomRequestStatus.ON_GOING && (
+                  <button
+                    onClick={() => {
+                      setIsViewModalOpen(false);
+                      handleMarkAsCompleted(selectedRequest.token);
+                    }}
+                    className="flex-1 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
+                  >
+                    <FaCheckCircle /> Mark as Completed
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -768,6 +896,30 @@ export default function HostRequests() {
         title="Reject Request"
         message="Are you sure you want to reject this room request? This action cannot be undone."
         confirmText="Yes, Reject"
+        cancelText="Cancel"
+        loading={isProcessing}
+      />
+
+      {/* Mark as Ongoing Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={isOngoingDialogOpen}
+        onClose={() => setIsOngoingDialogOpen(false)}
+        onConfirm={confirmMarkAsOngoing}
+        title="Mark as Ongoing"
+        message="Mark this request as ongoing? The guest will be notified that their stay has started."
+        confirmText="Yes, Mark as Ongoing"
+        cancelText="Cancel"
+        loading={isProcessing}
+      />
+
+      {/* Mark as Completed Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={isCompleteDialogOpen}
+        onClose={() => setIsCompleteDialogOpen(false)}
+        onConfirm={confirmMarkAsCompleted}
+        title="Mark as Completed"
+        message="Mark this request as completed? This indicates the guest's stay has ended."
+        confirmText="Yes, Mark as Completed"
         cancelText="Cancel"
         loading={isProcessing}
       />

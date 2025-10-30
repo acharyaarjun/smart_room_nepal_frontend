@@ -28,8 +28,8 @@ export default function Navbar() {
 
           {/* Right: Icons (desktop only) */}
           <div className="flex items-center space-x-4 mt-2 md:mt-0">
-            <SearchDropdown />
-            <NotificationDropdown />
+            {/* <SearchDropdown />
+            <NotificationDropdown /> */}
             <ProfileDropdown />
             {/* Mobile hamburger */}
             <button

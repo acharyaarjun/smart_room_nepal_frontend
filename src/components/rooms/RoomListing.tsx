@@ -15,6 +15,7 @@ import { Amenity } from "@/types/user/amenity";
 import { IconComponent } from "@/components/common";
 import { getAllRooms } from "@/services/userService";
 import { useSearchParams } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 interface RoomListingProps {
   districts: District[];
@@ -37,6 +38,9 @@ export default function RoomListing({
     locations: [],
     maxCapacity: "",
     roomType: "",
+    latitude: undefined,
+    longitude: undefined,
+    radius: undefined,
   });
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -52,16 +56,36 @@ export default function RoomListing({
     const roomType = searchParams.get("roomType");
     const maxCapacity = searchParams.get("maxCapacity");
 
-    if (district || roomType || maxCapacity) {
-      // Show filters if coming from search
-      setShowFilters(true);
+    // Check for nearby location from home page
+    const nearbyLocation = sessionStorage.getItem("nearbyLocation");
+    let locationData = null;
+    if (nearbyLocation) {
+      try {
+        locationData = JSON.parse(nearbyLocation);
+        // Clear after reading
+        sessionStorage.removeItem("nearbyLocation");
+      } catch (e) {
+        console.error("Error parsing nearby location:", e);
+      }
+    }
+
+    if (district || roomType || maxCapacity || locationData) {
+      // Show filters if coming from search or home page
+      setShowFilters(!!locationData);
 
       setFilters((prev) => ({
         ...prev,
         locations: district ? [district] : prev.locations,
         roomType: roomType || prev.roomType,
         maxCapacity: maxCapacity || prev.maxCapacity,
+        latitude: locationData?.latitude,
+        longitude: locationData?.longitude,
+        radius: locationData?.radius,
       }));
+
+      if (locationData) {
+        toast.success("Showing rooms within 10km of your location!");
+      }
     }
 
     setIsInitialized(true);
@@ -87,6 +111,9 @@ export default function RoomListing({
       locations: [],
       maxCapacity: "",
       roomType: "",
+      latitude: undefined,
+      longitude: undefined,
+      radius: undefined,
     });
   };
 
@@ -113,6 +140,9 @@ export default function RoomListing({
             filters.amenities.length > 0
               ? filters.amenities.join(",")
               : undefined,
+          latitude: filters.latitude,
+          longitude: filters.longitude,
+          radius: filters.radius,
         });
 
         if (response.status === 200 && response.data) {

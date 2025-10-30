@@ -6,6 +6,7 @@ import { District } from "@/types/user/district";
 import RoomType from "@/enums/roomType";
 import MaxCapacity from "@/enums/maxCapacity";
 import { SelectElement } from "@/components/common/form-element";
+import LocationFilter from "./LocationFilter";
 
 interface HorizontalFiltersProps {
   filters: Filters;
@@ -114,6 +115,23 @@ const HorizontalFilters: React.FC<HorizontalFiltersProps> = ({
 
       {/* Filters Grid */}
       <div className="grid grid-cols-2 gap-4">
+        {/* Location Filter */}
+        <div className="col-span-2">
+          <LocationFilter
+            latitude={tempFilters.latitude}
+            longitude={tempFilters.longitude}
+            radius={tempFilters.radius}
+            onLocationChange={(lat, lng, radius) =>
+              setTempFilters((prev) => ({
+                ...prev,
+                latitude: lat,
+                longitude: lng,
+                radius: radius,
+              }))
+            }
+          />
+        </div>
+
         {/* Room Name */}
         <div>
           <label className="block font-medium text-normal mb-2">

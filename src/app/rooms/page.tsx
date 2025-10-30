@@ -3,9 +3,6 @@ import { Metadata } from "next";
 import React from "react";
 import AppUrl from "@/utils/appConsts";
 import { Rooms } from "@/components/rooms";
-import { getDistricts, getAmenities } from "@/services/userService";
-import { District } from "@/types/user/district";
-import { Amenity } from "@/types/user/amenity";
 
 export const metadata: Metadata = {
   title: AppConsts.APP_NAME + " | Rooms",
@@ -40,13 +37,6 @@ export const metadata: Metadata = {
 };
 
 export default async function page() {
-  const [districtsData, amenitiesData] = await Promise.all([
-    getDistricts(),
-    getAmenities(),
-  ]);
-
-  const districts: District[] = districtsData?.data.data || [];
-  const amenities: Amenity[] = amenitiesData?.data.data || [];
-
-  return <Rooms districts={districts} amenities={amenities} />;
+  // Districts and amenities will be fetched in the client component
+  return <Rooms />;
 }

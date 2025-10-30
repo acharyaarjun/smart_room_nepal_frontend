@@ -6,3 +6,4 @@ export { default as ExploreNearby } from "./ExploreNearby";
 export { default as BookingProcess } from "./BookingProcess";
 export { default as RecentlyViewed } from "./RecentlyViewed";
 export { default as Testimonials } from "./Testimonials";
+export { default as RoomsNearMe } from "./RoomsNearMe";

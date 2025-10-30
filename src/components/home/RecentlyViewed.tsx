@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Room } from "@/types/user/room";
 import { SingleRoomItem } from "@/components/rooms";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -7,20 +7,20 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import { getAllRooms } from "@/services/userService";
+import { getRecentlyViewedRooms } from "@/services/userService";
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
 
 export default function RecentlyViewed() {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const { user } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     const fetchRecentRooms = async () => {
       setLoading(true);
       try {
-        const response = await getAllRooms({
-          page: 1,
-          size: 10,
-        });
+        const response = await getRecentlyViewedRooms();
 
         if (response.status === 200 && response.data) {
           setRooms(response.data.data || []);
@@ -33,8 +33,14 @@ export default function RecentlyViewed() {
       }
     };
 
-    fetchRecentRooms();
-  }, []);
+    if (user) {
+      fetchRecentRooms();
+    }
+  }, [user]);
+
+  if (!user) {
+    return null; // Don't show section if not logged in
+  }
 
   if (loading) {
     return (

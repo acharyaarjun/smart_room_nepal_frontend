@@ -4,16 +4,14 @@ import React from "react";
 import AppUrl from "@/utils/appConsts";
 import { RoomDetails } from "@/components/rooms/details";
 import { Breadcrumb } from "@/components/common";
-import { getSingleRoom } from "@/services/userService";
-import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: AppConsts.APP_NAME + " | Details",
+  title: AppConsts.APP_NAME + " | Room Details",
   description: AppConsts.APP_DESCRIPTION,
   openGraph: {
     type: "website",
     locale: "en_IE",
-    url: new URL(`${AppUrl.APP_BASE_URL}/rooms/slug`),
+    url: new URL(`${AppUrl.APP_BASE_URL}/rooms`),
     images: [
       {
         url: `${AppUrl.APP_BASE_URL}/logo.png`,
@@ -41,32 +39,20 @@ export const metadata: Metadata = {
 
 type Params = Promise<{ slug: string }>;
 export default async function page({ params }: { params: Params }) {
-  try {
-    const { slug } = await params;
-    const response = await getSingleRoom(slug);
+  const { slug } = await params;
 
-    if (response.status !== 200 || !response.data) {
-      notFound();
-    }
-
-    const roomData = response.data;
-
-    return (
-      <>
-        <Breadcrumb
-          title={roomData.name}
-          description="Discover the best rooms available across Nepal, carefully selected for comfort and convenience."
-          breadcrumb={[
-            { label: "Home", href: "/" },
-            { label: "Rooms", href: "/rooms" },
-            { label: roomData.name },
-          ]}
-        />
-        <RoomDetails room={roomData} />
-      </>
-    );
-  } catch (error) {
-    console.error("Error fetching room details:", error);
-    notFound();
-  }
+  return (
+    <>
+      <Breadcrumb
+        title="Room Details"
+        description="Discover the best rooms available across Nepal, carefully selected for comfort and convenience."
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Rooms", href: "/rooms" },
+          { label: "Details" },
+        ]}
+      />
+      <RoomDetails slug={slug} />
+    </>
+  );
 }

@@ -6,6 +6,7 @@ import { District } from "@/types/user/district";
 import RoomType from "@/enums/roomType";
 import MaxCapacity from "@/enums/maxCapacity";
 import { SelectElement } from "@/components/common/form-element";
+import LocationFilter from "./LocationFilter";
 
 interface SidebarFiltersProps {
   filters: Filters;
@@ -100,6 +101,21 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
           Clear All
         </button>
       </div>
+
+      {/* Location Filter */}
+      <LocationFilter
+        latitude={tempFilters.latitude}
+        longitude={tempFilters.longitude}
+        radius={tempFilters.radius}
+        onLocationChange={(lat, lng, radius) =>
+          setTempFilters((prev) => ({
+            ...prev,
+            latitude: lat,
+            longitude: lng,
+            radius: radius,
+          }))
+        }
+      />
 
       {/* Room Name Search */}
       <div className="mb-6">

@@ -7,4 +7,7 @@ export type Filters = {
   locations: string[];
   maxCapacity: string;
   roomType: string;
+  latitude?: number;
+  longitude?: number;
+  radius?: number; // in kilometers
 };

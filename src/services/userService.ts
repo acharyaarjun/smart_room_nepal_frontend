@@ -14,6 +14,9 @@ interface Params {
   maxCapacity?: string;
   districts?: string; // comma separated district slugs
   amenities?: string; // comma separated amenity IDs
+  latitude?: number; // required if longitude is provided
+  longitude?: number; // required if latitude is provided
+  radius?: number; // in kilometers
 }
 
 export const getDistricts = async () => {
@@ -43,6 +46,9 @@ export const getAllRooms = async ({
   districts,
   amenities,
   isFeatured,
+  latitude,
+  longitude,
+  radius,
 }: Params) => {
   const params: Params = {
     page: page,
@@ -58,6 +64,9 @@ export const getAllRooms = async ({
   if (districts) params.districts = districts;
   if (amenities) params.amenities = amenities;
   if (isFeatured !== undefined) params.isFeatured = isFeatured;
+  if (latitude !== undefined) params.latitude = latitude;
+  if (longitude !== undefined) params.longitude = longitude;
+  if (radius !== undefined) params.radius = radius;
 
   const response = await axiosInstance.get(AppApis.rooms.get, {
     params,
@@ -65,6 +74,12 @@ export const getAllRooms = async ({
   return response.data;
 };
 
+export const getRecentlyViewedRooms = async () => {
+  const response = await axiosInstance.get(AppApis.rooms.recentlyViewed, {
+    params: { size: 10 },
+  });
+  return response.data;
+};
 export const toggleWishlist = async (slug: string) => {
   const response = await axiosInstance.post(AppApis.rooms.wishlist(slug));
   return response.data;

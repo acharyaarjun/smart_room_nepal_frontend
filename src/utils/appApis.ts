@@ -50,6 +50,8 @@ const AppApis = {
     update: (slug: string) => `/api/${API_VERSION}/rooms/${slug}`,
     delete: (slug: string) => `/api/${API_VERSION}/rooms/${slug}`,
 
+    recentlyViewed: `/api/${API_VERSION}/rooms/recently-viewed`,
+
     // for normal users
     get: `/api/${API_VERSION}/rooms`,
     getSingleForUser: (slug: string) =>
